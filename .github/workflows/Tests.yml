@@ -1,9 +1,12 @@
-name: CI
+name: Tests
 
 on:
   push:
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 env:
   FOUNDRY_PROFILE: ci
@@ -24,6 +27,9 @@ jobs:
         run: |
           forge --version
 
+      - name: Install Dependencies 
+        run: forge install
+
       - name: Run Forge fmt
         run: |
           forge fmt --check
@@ -38,3 +44,10 @@ jobs:
         run: |
           forge test -vvv
         id: test
+
+      - name: Run snapshot tests
+        run: forge snapshot
+
+      - name: Run coverage
+        run: |
+          forge coverage --report summary
