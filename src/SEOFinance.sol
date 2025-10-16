@@ -91,16 +91,6 @@ contract SEOFinance is ReentrancyGuard {
         emit ETHReleased(jobId, to, amount);
     }
 
-    // function refundERC20(uint256 jobId, address token, address to, uint256 amount) external nonReentrant onlyEscrow {
-    //     releaseERC20(jobId, token, to, amount);
-    //     emit ERC20Refunded(jobId, token, to, amount);
-    // }
-
-    // function refundETH(uint256 jobId, address payable to, uint256 amount) external nonReentrant onlyEscrow {
-    //     releaseETH(jobId, to, amount);
-    //     emit ETHRefunded(jobId, to, amount);
-    // }
-
 
     function balanceOf(uint256 jobId, address token) external view returns (uint256) {
         return _balances[jobId][token];
