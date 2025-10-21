@@ -49,7 +49,7 @@ export default function Home() {
         <ul className={styles.components}>
           {[
             {
-              name: "Transaction",
+              name: "Test",
               url: "https://docs.base.org/onchainkit/transaction/transaction",
             },
             {
