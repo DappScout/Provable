@@ -12,3 +12,11 @@ docs/
 
 # Dotenv file
 .env
+
+.mcp.json
+
+CLAUDE.md
+notes.md
+
+/Provable/mcp
+/SEOsolver
