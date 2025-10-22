@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.30;
 
 import {SEOEscrow} from "./SEOEscrow.sol";
 
@@ -40,7 +40,10 @@ contract SEOArbiter {
         emit ArbiterRemoved(_arbiter);
     }
 
-    function resolveDispute(uint256 jobId, uint256 clientAmount, uint256 freelancerAmount) external onlyArbiter {
+    function resolveDisputeOnEscrow(uint256 jobId, uint256 clientAmount, uint256 freelancerAmount)
+        external
+        onlyArbiter
+    {
         require(!resolvedDisputes[jobId], "Already resolved");
 
         escrow.resolveDispute(jobId, clientAmount, freelancerAmount);

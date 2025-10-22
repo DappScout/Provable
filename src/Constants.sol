@@ -6,6 +6,6 @@ pragma solidity 0.8.30;
 ///@notice Contract that keep all the constants variables
 
 contract Constants {
-    uint265 internal constant MIN_BUDGET = 1000000 wei;
-
+    uint256 internal constant MIN_BUDGET = 0.03 ether;
+    uint256 internal constant MAX_JOBS_PER_CLIENT = 5;
 }

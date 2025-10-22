@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.30;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -52,7 +52,6 @@ contract SEOFinance is ReentrancyGuard {
         emit EscrowSet(address(_escrow));
     }
 
-
     function depositERC20(uint256 jobId, address token, uint256 amount) external nonReentrant onlyEscrow {
         require(amount > 0, "SEOFinance: zero amount");
         require(token != address(0), "SEOFinance: token must be ERC20");
@@ -85,12 +84,11 @@ contract SEOFinance is ReentrancyGuard {
         require(to != payable(address(0)), "SEOFinance: zero recipient");
 
         _balances[jobId][address(0)] -= amount;
-        (bool ok, ) = to.call{value: amount}("");
+        (bool ok,) = to.call{value: amount}("");
         require(ok, "SEOFinance: ETH transfer failed");
 
         emit ETHReleased(jobId, to, amount);
     }
-
 
     function balanceOf(uint256 jobId, address token) external view returns (uint256) {
         return _balances[jobId][token];
@@ -105,7 +103,7 @@ contract SEOFinance is ReentrancyGuard {
 
     function sweepETH(address payable to) external onlyOwner {
         uint256 balance = address(this).balance;
-        (bool ok, ) = to.call{value: balance}("");
+        (bool ok,) = to.call{value: balance}("");
         require(ok, "SEOFinance: sweep ETH failed");
     }
 
