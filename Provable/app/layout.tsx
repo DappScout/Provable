@@ -3,6 +3,7 @@ import { Inter, Source_Code_Pro } from "next/font/google";
 import { SafeArea } from "@coinbase/onchainkit/minikit";
 import { minikitConfig } from "@/minikit.config";
 import { RootProvider } from "./rootProvider";
+import AppLayout from "../components/AppLayout";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -44,7 +45,9 @@ export default function RootLayout({
     <RootProvider>
       <html lang="en">
         <body className={`${inter.variable} ${sourceCodePro.variable}`}>
-          <SafeArea>{children}</SafeArea>
+          <SafeArea>
+            <AppLayout>{children}</AppLayout>
+          </SafeArea>
         </body>
       </html>
     </RootProvider>
