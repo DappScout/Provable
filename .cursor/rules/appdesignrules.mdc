@@ -1,0 +1,128 @@
+---
+alwaysApply: true
+---
+# Design Guidelines for SEO Freelance App
+
+## Overview
+This document outlines the design rules and guidelines for the SEO Freelance App, a platform for connecting clients with SEO specialists. The app focuses on offers, profiles, analytics, and messaging. The design emphasizes a dark theme for better readability in low-light environments, minimalism, and intuitive navigation. All designs must adhere strictly to the defined color palette to maintain consistency.
+
+The app will be developed using React with Next.js as the framework for server-side rendering and static site generation capabilities. Styling will be handled via Tailwind CSS for utility-first classes. Where possible, integrate Gluestack UI components (from npm) to leverage pre-built, customizable UI elements that support Tailwind integration via NativeWind, ensuring compatibility across web and potential future mobile extensions.
+
+## Color Palette
+The app uses a strict dark mode color scheme. No light mode variants are allowed without explicit approval. Colors are defined in HEX format for consistency across platforms. Configure Tailwind and Gluestack to extend the theme with these colors.
+
+- **Primary Background**: #121212 (Dark gray for main screens and backgrounds)
+- **Secondary Background (Cards/Sections)**: #1E1E1E (Slightly lighter gray for cards, panels, and modals)
+- **Text Primary**: #FFFFFF (White for main text, headings, and labels)
+- **Text Secondary**: #B0B0B0 (Light gray for subtitles, descriptions, and timestamps)
+- **Accent Positive/Success**: #4CAF50 (Green for completed status, upward arrows, and positive metrics like impressions/views)
+- **Accent Highlight/Selection**: #2196F3 (Blue for selected items, borders around active offers, and call-to-action buttons like "Sign Offer")
+- **Accent Warning/Neutral**: #FFC107 (Yellow for warnings, drafts, or pending statuses)
+- **Accent Error/Negative**: #F44336 (Red for errors, suspicious activity, or downward trends)
+- **Icons and Dividers**: #757575 (Medium gray for icons, horizontal lines, and navigation bars)
+- **Progress Bars**: #FFFFFF (White fill on #424242 background for progress indicators)
+
+**Rules for Color Usage**:
+- Always use the exact HEX values; no variations or gradients unless specified.
+- Ensure high contrast ratios (at least 4.5:1) for text on backgrounds per WCAG guidelines.
+- Accents (green, blue) should be used sparingly for emphasis only.
+- No custom colors allowed; all UI elements must map to this palette.
+- In Tailwind config, define custom colors like `primary-bg: '#121212'`, and use classes like `bg-primary-bg`.
+- For Gluestack components, customize themes to match this palette using their theming API.
+
+## Typography
+Use system fonts for cross-platform compatibility, or configure Gluestack's default fonts. If custom fonts are needed, load them via Next.js.
+
+- **Headings (e.g., Screen Titles like "Received", "Domain.com SEO Growth")**: Bold, 20-24px, #FFFFFF
+- **Subheadings (e.g., "Analytics", "Specialist")**: Medium, 16-18px, #FFFFFF
+- **Body Text (e.g., Bios, Offer Descriptions)**: Regular, 14px, #B0B0B0
+- **Small Text (e.g., Timestamps like "29 days left", Metrics like "855")**: Regular, 12px, #B0B0B0 or accent colors for emphasis
+- **Buttons (e.g., "Message", "Sign Offer")**: Bold, 14px, #FFFFFF on accent backgrounds
+
+**Rules for Typography**:
+- Line height: 1.5x font size for readability.
+- No more than 3 font weights (Regular, Medium, Bold).
+- Text alignment: Left-aligned by default; center for headings or metrics.
+- Truncate long text with ellipses (e.g., bios or offer content) and provide expansion if needed.
+- Avoid all-caps except for acronyms like "SEO".
+- Use Tailwind classes like `text-xl font-bold text-white` for headings.
+- Leverage Gluestack's Text component for consistent typography.
+
+## Layout and Spacing
+The app is designed for responsive web (mobile-first), using Next.js for routing and Tailwind for responsive utilities. Aim for a mobile-like experience on web, with potential PWA features.
+
+- **Screen Structure**:
+  - Top: Search bars or titles with padding of 16px.
+  - Middle: Scrollable content with cards stacked vertically.
+  - Bottom: Navigation bar with icons (Home, Offers, Profile) – use fixed positioning for mobile views.
+- **Spacing**:
+  - Between sections (e.g., Received and Sent): 24px vertical.
+  - Inside cards: 16px padding on all sides.
+  - Between elements (e.g., profile pic and name): 8px horizontal/vertical.
+  - Margins: 16px from screen edges for content.
+- **Grid System**: Use Tailwind's flex and grid utilities; cards should span full width on mobile, with breakpoints for larger screens.
+- **Progress Indicators**: Horizontal bars with rounded corners (8px radius), using Primary Background as base.
+
+**Rules for Layout**:
+- All corners (cards, buttons) must have 8px border-radius for a soft, modern look.
+- Use shadows sparingly: Subtle elevation (e.g., shadow-md in Tailwind) with #000000 at 20% opacity.
+- Responsive: Use Tailwind breakpoints (e.g., `sm:`, `md:`) to adapt layouts.
+- Navigation: Bottom tab bar with 3-5 icons, centered, 48px height – implement with Gluestack's Tabs or custom with Tailwind.
+- Use Next.js App Router for pages like /home, /offers, /profile.
+
+## Components
+Define reusable UI components with strict guidelines. Prefer Gluestack UI components where available (e.g., Button, Card, Avatar) and style them with Tailwind classes via NativeWind.
+
+### Profile Card
+- Use Gluestack Avatar for circular image: 64px diameter, with 2px border if selected (#2196F3).
+- Name: Bold, 16px, below avatar.
+- Subtitle (e.g., "Working on Domain.com"): 14px, #B0B0B0.
+- Example: Used in Received/Sent lists and specialist profiles.
+- Implement as a React component: `<ProfileCard avatarSrc="..." name="Adam Smith" subtitle="..." />`
+
+### Offer Card
+- Title: Bold, 18px, #FFFFFF.
+- Status: Right-aligned, 12px (Green for "Complete", Gray for others).
+- Subtitle/Description: Truncated to 2 lines.
+- Highlight: Blue border (2px) when selected.
+- Analytics Section: Grid of metrics with upward arrows in green.
+- Use Gluestack Card or VStack for layout.
+
+### Buttons
+- Primary (e.g., "Sign Offer"): #2196F3 background, #FFFFFF text, 48px height, full-width or 120px min.
+- Secondary (e.g., "Cancel"): #1E1E1E background, #FFFFFF text, outlined with #757575.
+- Rounded corners: 24px.
+- Use Gluestack Button component with custom styles.
+
+### Search Bar
+- Background: #1E1E1E, 48px height, full-width.
+- Placeholder: #B0B0B0.
+- Icon: Right-aligned clear button.
+- Use Gluestack Input with search variant.
+
+### Lists (e.g., Recents/Results)
+- Vertical stack with dividers (#757575, 1px).
+- Each item: 72px height, with avatar left, text center, action right.
+- Use Gluestack FlatList or custom with Tailwind flex.
+
+**Rules for Components**:
+- All interactive elements must have hover/focus states (e.g., opacity changes via Tailwind).
+- Accessibility: Add aria-labels, use semantic HTML in React.
+- No animations unless subtle (e.g., transitions for modals via CSS).
+- Export components from a shared directory in Next.js (e.g., /components).
+
+## Icons
+Use simple line icons from a library like Lucide or Heroicons, integrated with Gluestack if available.
+- Size: 24px.
+- Color: #757575 default; accents for active states.
+- Examples: Home (house), Offers (arrow), Profile (person).
+
+## Accessibility and Usability
+- Ensure touch targets are at least 48x48px for mobile.
+- Support dynamic type scaling via Tailwind.
+- Dark mode only; no theme switching.
+- Error Handling: Use red accents for alerts, with Gluestack Toast or Alert.
+
+## Versioning and Updates
+- Version 1.0: Based on provided screenshots.
+- Any changes to guidelines require approval and documentation updates.
