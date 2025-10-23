@@ -3,11 +3,14 @@
 > A trustless escrow system for SEO services with automated, verifiable performance validation.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Solidity](https://img.shields.io/badge/Solidity-^0.8.20-blue)](https://soliditylang.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-^0.8.30-blue)](https://soliditylang.org/)
+[![Base](https://img.shields.io/badge/Deployed_on-Base-blue)](https://www.base.org/)
 [![Chainlink](https://img.shields.io/badge/Chainlink-Powered-red)](https://chain.link/)
 
----
+![Tests](https://github.com/DappScout/Provable/actions/workflows/Tests.yml/badge.svg)
+![Documentation](https://github.com/DappScout/Provable/actions/workflows/Docs.yml/badge.svg)
 
+---
 ## 🎯 What is Provable?
 
 **Provable** is a decentralized protocol that eliminates trust issues in SEO service agreements by using smart contracts and oracle-based validation. It ensures that SEO specialists only get paid when they deliver measurable, verifiable results.
@@ -44,18 +47,287 @@ Provable locks payment in a smart contract and automatically validates SEO perfo
 ### Payment & Resolution Paths
 
 **Current Implementation:**
-```
-Job Created → Signed → Funded → Work Period → Completed
-                                              ↓
-                                         Dispute (if needed)
-                                              ↓
-                                    Arbiter Resolution
+
+```mermaid
+flowchart TB
+    subgraph manual["MANUAL PERIOD"]
+        subgraph offer_creation["Creating an offer and terms"]
+            Client1[Client]
+            CreateOffer[Create an offer<br/>- from preset or<br/>custom values]
+            SeeOffer[See and choose<br/>the offer<br/>signs it]
+            SEOSpec1[SEO spec.]
+            
+            Client1 -->|create<br/>an offer<br/>with<br/>terms<br/>and<br/>payment| CreateOffer
+            CreateOffer --> SeeOffer
+            SEOSpec1 -->|sign it| SeeOffer
+        end
+        
+        subgraph lock_funds["Locking funds - contract execution"]
+            Client2[Client]
+            LockFunds[Lock funds<br/>start the job<br/>period of one week]
+            
+            SeeOffer --> LockFunds
+            Client2 -->|locking full<br/>amount<br/>100$| LockFunds
+        end
+        
+        subgraph working["Working... (1 week period)"]
+            SEOSpec2[SEO spec.]
+            JobDoneDecision{SEO spec clicks<br/>'Job Done'?}
+            JobDoneBtn[Job marked as done<br/>by SEO spec.]
+            NoJobDone[SEO spec didn't<br/>click 'Job Done']
+            
+            LockFunds --> JobDoneDecision
+            SEOSpec2 --> JobDoneDecision
+            JobDoneDecision -->|Yes| JobDoneBtn
+            JobDoneDecision -->|No| NoJobDone
+        end
+        
+        subgraph mark_done["Manual Payout Option"]
+            Client3[Client]
+            ManualPayout{Client pays<br/>manually?}
+            PayoutNow[Client clicks payout<br/>SEO spec gets paid]
+            WaitForAuto[Wait 1 day<br/>No manual payout]
+            AutoRefund[Manual Payout Period ends<br/>Automatic refund to Client]
+            
+            JobDoneBtn --> ManualPayout
+            Client3 --> ManualPayout
+            ManualPayout -->|Yes| PayoutNow
+            ManualPayout -->|No| WaitForAuto
+            NoJobDone --> AutoRefund
+        end
+    end
+    
+    subgraph automated["AUTOMATED PERIOD"]
+        subgraph validation_start["After 1 day (if no manual payout)"]
+            Keeper1[Chainlink<br/>keeper]
+            Anyone[or anyone]
+            StartValidation[Function<br/>startValidation<br/>Triggered 1 day after 'Job Done'<br/>if client didn't pay manually]
+            
+            WaitForAuto --> StartValidation
+            Keeper1 --> StartValidation
+            Anyone --> StartValidation
+        end
+        
+        subgraph validation_period["Validation period (30 days)"]
+            Keeper2[Chainlink<br/>keeper]
+            CheckStatus[During 30 days:<br/>Check website status<br/>and fetch validation data<br/>to calculate score]
+            SEOSpec3[SEO spec.]
+            SEOSpec4[SEO spec.]
+            
+            StartValidation --> CheckStatus
+            Keeper2 --> CheckStatus
+            SEOSpec3 --> CheckStatus
+            CheckStatus --> SEOSpec4
+        end
+        
+        subgraph finish["Finishing contract"]
+            ManualSuccess[Manual Payout<br/>Complete ✓]
+            RefundComplete[Refund to Client<br/>Complete ✓]
+            Results[Automated Results:<br/>Funds sent to SEO spec.<br/>or refunded to Client<br/>based on validation score]
+            
+            PayoutNow --> ManualSuccess
+            AutoRefund --> RefundComplete
+            CheckStatus --> Results
+        end
+    end
+    
+    style manual fill:#2a2a2a,stroke:#98F7E9,stroke-width:2px
+    style automated fill:#2a2a2a,stroke:#19D1B6,stroke-width:2px
+    style offer_creation fill:#1f1f1f,stroke:#98F7E9
+    style lock_funds fill:#1f1f1f,stroke:#98F7E9
+    style working fill:#1f1f1f,stroke:#98F7E9
+    style mark_done fill:#1f1f1f,stroke:#98F7E9
+    style validation_start fill:#1f1f1f,stroke:#19D1B6
+    style validation_period fill:#1f1f1f,stroke:#19D1B6
+    style finish fill:#1f1f1f,stroke:#19D1B6
+    
+    style Client1 fill:#98F7E9,color:#6D6D6D
+    style Client2 fill:#98F7E9,color:#6D6D6D
+    style Client3 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec1 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec2 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec3 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec4 fill:#98F7E9,color:#6D6D6D
+    style Keeper1 fill:#19D1B6,color:#ffffff
+    style Keeper2 fill:#19D1B6,color:#ffffff
+    style Anyone fill:#98F7E9,color:#6D6D6D
+    
+    style CreateOffer fill:#19D1B6,color:#ffffff
+    style SeeOffer fill:#19D1B6,color:#ffffff
+    style LockFunds fill:#19D1B6,color:#ffffff
+    style JobDoneDecision fill:#98F7E9,color:#6D6D6D
+    style JobDoneBtn fill:#19D1B6,color:#ffffff
+    style NoJobDone fill:#b3b3b3,color:#6D6D6D
+    style ManualPayout fill:#98F7E9,color:#6D6D6D
+    style PayoutNow fill:#19D1B6,color:#ffffff
+    style WaitForAuto fill:#b3b3b3,color:#6D6D6D
+    style AutoRefund fill:#6D6D6D,color:#ffffff
+    style StartValidation fill:#19D1B6,color:#ffffff
+    style CheckStatus fill:#19D1B6,color:#ffffff
+    style Results fill:#19D1B6,color:#ffffff
+    style ManualSuccess fill:#19D1B6,color:#ffffff
+    style RefundComplete fill:#19D1B6,color:#ffffff
 ```
 
-**Phase 2 - Automated Validation:**
+**Phase 1 - Manual Period**
+Client creates an offer, SEO specialist signs it, funds are locked, work is completed, and client either pays manually or triggers automated validation.
+
+```mermaid
+flowchart TB
+    subgraph manual["MANUAL PERIOD - Phase 1 (Live Now)"]
+        subgraph offer_creation["Creating an offer and terms"]
+            Client1[Client]
+            CreateOffer[Create an offer<br/>- from preset or<br/>custom values]
+            SeeOffer[See and choose<br/>the offer<br/>signs it]
+            SEOSpec1[SEO spec.]
+            
+            Client1 -->|create<br/>an offer<br/>with<br/>terms<br/>and<br/>payment| CreateOffer
+            CreateOffer --> SeeOffer
+            SEOSpec1 -->|sign it| SeeOffer
+        end
+        
+        subgraph lock_funds["Locking funds - contract execution"]
+            Client2[Client]
+            LockFunds[Lock funds<br/>start the job<br/>period of one week]
+            
+            SeeOffer --> LockFunds
+            Client2 -->|locking full<br/>amount<br/>100$| LockFunds
+        end
+        
+        subgraph working["Working... (1 week period)"]
+            SEOSpec2[SEO spec.]
+            JobDoneDecision{SEO spec clicks<br/>'Job Done'?}
+            JobDoneBtn[Job marked as done<br/>by SEO spec.]
+            NoJobDone[SEO spec didn't<br/>click 'Job Done']
+            
+            LockFunds --> JobDoneDecision
+            SEOSpec2 --> JobDoneDecision
+            JobDoneDecision -->|Yes| JobDoneBtn
+            JobDoneDecision -->|No| NoJobDone
+        end
+        
+        subgraph mark_done["Manual Payout Option"]
+            Client3[Client]
+            ManualPayout{Client pays<br/>manually?}
+            PayoutNow[Client clicks payout<br/>SEO spec gets paid]
+            WaitForAuto[Wait 1 day<br/>No manual payout]
+            AutoRefund[Manual Payout Period ends<br/>Automatic refund to Client]
+            
+            JobDoneBtn --> ManualPayout
+            Client3 --> ManualPayout
+            ManualPayout -->|Yes| PayoutNow
+            ManualPayout -->|No| WaitForAuto
+            NoJobDone --> AutoRefund
+        end
+        
+        subgraph endpoints["Endpoints"]
+            ManualSuccess[✓ Manual Payout<br/>Complete]
+            RefundComplete[✓ Refund to Client<br/>Complete]
+            TriggerAuto[🔄 Triggering Automation...<br/>See: Automated Period diagram]
+            
+            PayoutNow --> ManualSuccess
+            AutoRefund --> RefundComplete
+            WaitForAuto --> TriggerAuto
+        end
+    end
+    
+    style manual fill:#2a2a2a,stroke:#98F7E9,stroke-width:3px
+    style offer_creation fill:#1f1f1f,stroke:#98F7E9
+    style lock_funds fill:#1f1f1f,stroke:#98F7E9
+    style working fill:#1f1f1f,stroke:#98F7E9
+    style mark_done fill:#1f1f1f,stroke:#98F7E9
+    style endpoints fill:#1f1f1f,stroke:#19D1B6,stroke-width:2px
+    
+    style Client1 fill:#98F7E9,color:#6D6D6D
+    style Client2 fill:#98F7E9,color:#6D6D6D
+    style Client3 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec1 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec2 fill:#98F7E9,color:#6D6D6D
+    
+    style CreateOffer fill:#19D1B6,color:#ffffff
+    style SeeOffer fill:#19D1B6,color:#ffffff
+    style LockFunds fill:#19D1B6,color:#ffffff
+    style JobDoneDecision fill:#98F7E9,color:#6D6D6D
+    style JobDoneBtn fill:#19D1B6,color:#ffffff
+    style NoJobDone fill:#b3b3b3,color:#6D6D6D
+    style ManualPayout fill:#98F7E9,color:#6D6D6D
+    style PayoutNow fill:#19D1B6,color:#ffffff
+    style WaitForAuto fill:#b3b3b3,color:#6D6D6D
+    style AutoRefund fill:#6D6D6D,color:#ffffff
+    
+    style ManualSuccess fill:#19D1B6,color:#ffffff
+    style RefundComplete fill:#19D1B6,color:#ffffff
+    style TriggerAuto fill:#98F7E9,color:#6D6D6D,stroke:#19D1B6,stroke-width:2px,stroke-dasharray: 5 5
 ```
-Completed → Trigger Validation → Oracle Fetches Metrics →
-Score Calculated → Auto-settle (Pay SEO or Refund Client)
+
+**Phase 2 - Automated Period**
+Chainlink oracles fetch real SEO performance data, calculate a score against predefined targets, and automatically pay the specialist or refund the client—no human judgment needed.
+
+```mermaid
+flowchart TB
+    subgraph automated["AUTOMATED PERIOD - Phase 2 (Coming Soon)"]
+        subgraph handoff["From Manual Period"]
+            TriggerPoint[🔄 Automation Triggered<br/>Client didn't pay manually<br/>after 1 day wait]
+            
+            style TriggerPoint fill:#98F7E9,color:#6D6D6D,stroke:#19D1B6,stroke-width:2px,stroke-dasharray: 5 5
+        end
+        
+        subgraph validation_start["Validation Trigger (Day 1 after Job Done)"]
+            Keeper1[Chainlink<br/>keeper]
+            Anyone[or anyone]
+            StartValidation[Function<br/>startValidation<br/>Triggered 1 day after 'Job Done'<br/>if client didn't pay manually]
+            
+            TriggerPoint --> StartValidation
+            Keeper1 --> StartValidation
+            Anyone --> StartValidation
+        end
+        
+        subgraph validation_period["Validation period (30 days)"]
+            Keeper2[Chainlink<br/>keeper]
+            CheckStatus[During 30 days:<br/>Check website status<br/>and fetch validation data<br/>to calculate score]
+            SEOSpec3[SEO spec.]
+            SEOSpec4[SEO spec.]
+            APICall[Oracle fetches:<br/>• Google Search Console<br/>• SERPApi rankings<br/>• PageSpeed metrics<br/>• Backlink data]
+            ScoreCalc[Calculate weighted score<br/>based on targets:<br/>• Keyword rankings<br/>• Indexed pages<br/>• Core Web Vitals<br/>• Traffic metrics]
+            
+            StartValidation --> CheckStatus
+            Keeper2 --> CheckStatus
+            SEOSpec3 --> CheckStatus
+            CheckStatus --> APICall
+            APICall --> ScoreCalc
+            ScoreCalc --> SEOSpec4
+        end
+        
+        subgraph settlement["Automated Settlement"]
+            ScoreDecision{Score ≥<br/>Threshold?}
+            PaySEO[✓ Pay SEO Specialist<br/>Target achieved]
+            RefundClient[✓ Refund Client<br/>Target not met]
+            
+            SEOSpec4 --> ScoreDecision
+            ScoreDecision -->|Yes| PaySEO
+            ScoreDecision -->|No| RefundClient
+        end
+    end
+    
+    style automated fill:#2a2a2a,stroke:#19D1B6,stroke-width:3px
+    style handoff fill:#1f1f1f,stroke:#98F7E9,stroke-dasharray: 5 5
+    style validation_start fill:#1f1f1f,stroke:#19D1B6
+    style validation_period fill:#1f1f1f,stroke:#19D1B6
+    style settlement fill:#1f1f1f,stroke:#19D1B6,stroke-width:2px
+    
+    style Keeper1 fill:#19D1B6,color:#ffffff
+    style Keeper2 fill:#19D1B6,color:#ffffff
+    style Anyone fill:#98F7E9,color:#6D6D6D
+    style SEOSpec3 fill:#98F7E9,color:#6D6D6D
+    style SEOSpec4 fill:#98F7E9,color:#6D6D6D
+    
+    style StartValidation fill:#19D1B6,color:#ffffff
+    style CheckStatus fill:#19D1B6,color:#ffffff
+    style APICall fill:#19D1B6,color:#ffffff
+    style ScoreCalc fill:#19D1B6,color:#ffffff
+    style ScoreDecision fill:#98F7E9,color:#6D6D6D
+    style PaySEO fill:#19D1B6,color:#ffffff
+    style RefundClient fill:#19D1B6,color:#ffffff
 ```
 
 ---

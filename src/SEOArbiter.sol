@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.30;
 
 import {SEOEscrow} from "./SEOEscrow.sol";
 
@@ -15,8 +15,7 @@ contract SEOArbiter {
     event ArbiterAdded(address indexed arbiter);
     event ArbiterRemoved(address indexed arbiter);
 
-    constructor(address _escrow) {
-        escrow = SEOEscrow(_escrow);
+    constructor() {
         owner = msg.sender;
     }
 
@@ -30,6 +29,11 @@ contract SEOArbiter {
         _;
     }
 
+    function setEscrow(SEOEscrow _escrow) external onlyOwner {
+        require(address(_escrow) != address(0), "SEOFinance: zero escrow");
+        escrow = _escrow;
+    }
+
     function addArbiter(address _arbiter) external onlyOwner {
         isArbiter[_arbiter] = true;
         emit ArbiterAdded(_arbiter);
@@ -40,7 +44,10 @@ contract SEOArbiter {
         emit ArbiterRemoved(_arbiter);
     }
 
-    function resolveDispute(uint256 jobId, uint256 clientAmount, uint256 freelancerAmount) external onlyArbiter {
+    function resolveDisputeOnEscrow(uint256 jobId, uint256 clientAmount, uint256 freelancerAmount)
+        external
+        onlyArbiter
+    {
         require(!resolvedDisputes[jobId], "Already resolved");
 
         escrow.resolveDispute(jobId, clientAmount, freelancerAmount);
