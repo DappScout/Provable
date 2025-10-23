@@ -169,7 +169,7 @@ flowchart TB
 **Phase 1 - Manual Period**
 Client creates an offer, SEO specialist signs it, funds are locked, work is completed, and client either pays manually or triggers automated validation.
 
-```
+```mermaid
 flowchart TB
     subgraph manual["MANUAL PERIOD - Phase 1 (Live Now)"]
         subgraph offer_creation["Creating an offer and terms"]
@@ -260,7 +260,7 @@ flowchart TB
 **Phase 2 - Automated Period**
 Chainlink oracles fetch real SEO performance data, calculate a score against predefined targets, and automatically pay the specialist or refund the client—no human judgment needed.
 
-```
+```mermaid
 flowchart TB
     subgraph automated["AUTOMATED PERIOD - Phase 2 (Coming Soon)"]
         subgraph handoff["From Manual Period"]
