@@ -4,7 +4,9 @@ pragma solidity 0.8.30;
 import "./BaseTest.sol";
 
 contract SEOEscrowTest is BaseTest {
-    event JobCreated(uint256 indexed jobId, address indexed client, address indexed freelancer, address token, uint256 budget);
+    event JobCreated(
+        uint256 indexed jobId, address indexed client, address indexed freelancer, address token, uint256 budget
+    );
 
     function setUp() public override {
         super.setUp();
@@ -14,18 +16,12 @@ contract SEOEscrowTest is BaseTest {
         vm.startPrank(client);
         uint256 budget = 1 ether;
         uint256 deadline = block.timestamp + 1 days;
-        
+
         uint256 jobId = escrow.createAJob(address(0), freelancer, budget, deadline);
-        
+
         assertEq(jobId, 1);
-        (
-            address jobClient,
-            address jobFreelancer,
-            address jobToken,
-            uint256 jobBudget,
-            ,,,,,,
-        ) = escrow.jobs(jobId);
-        
+        (address jobClient, address jobFreelancer, address jobToken, uint256 jobBudget,,,,,,,) = escrow.jobs(jobId);
+
         assertEq(jobClient, client);
         assertEq(jobFreelancer, freelancer);
         assertEq(jobToken, address(0));

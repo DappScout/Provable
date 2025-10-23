@@ -14,12 +14,12 @@ contract SEOFinanceTest is BaseTest {
 
     //     vm.deal(address(this), amount);
     //     finance.depositETH{value: amount}(jobId);
-        
+
     //     assertEq(finance.balanceOf(jobId, address(0)), amount);
-        
+
     //     address payable recipient = payable(makeAddr("recipient"));
     //     finance.releaseETH(jobId, recipient, amount);
-        
+
     //     assertEq(recipient.balance, amount);
     //     assertEq(finance.balanceOf(jobId, address(0)), 0);
     // }
@@ -30,13 +30,13 @@ contract SEOFinanceTest is BaseTest {
 
     //     token.approve(address(finance), amount);
     //     token.transfer(address(this), amount);
-        
+
     //     finance.depositERC20(jobId, address(token), amount);
     //     assertEq(finance.balanceOf(jobId, address(token)), amount);
-        
+
     //     address recipient = makeAddr("recipient");
     //     finance.releaseERC20(jobId, address(token), recipient, amount);
-        
+
     //     assertEq(token.balanceOf(recipient), amount);
     //     assertEq(finance.balanceOf(jobId, address(token)), 0);
     // }

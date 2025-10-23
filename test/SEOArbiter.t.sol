@@ -10,23 +10,23 @@ contract SEOArbiterTest is BaseTest {
 
     function test_AddArbiter() public {
         address newArbiter = makeAddr("newArbiter");
-        
+
         vm.prank(arbiter.owner());
         arbiter.addArbiter(newArbiter);
-        
+
         assertTrue(arbiter.isArbiter(newArbiter));
     }
 
     function test_DisputeResolution() public {
         uint256 jobId = setupDisputedJob();
         uint256 totalAmount = 1 ether;
-        
+
         vm.prank(arbiter.owner());
         arbiter.addArbiter(arbiterUser);
-        
+
         vm.prank(arbiterUser);
         arbiter.resolveDisputeOnEscrow(jobId, totalAmount / 2, totalAmount / 2);
-        
+
         assertTrue(arbiter.resolvedDisputes(jobId));
     }
 
