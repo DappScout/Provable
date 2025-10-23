@@ -37,12 +37,8 @@ contract SEOFinance is ReentrancyGuard {
         _;
     }
 
-    constructor(SEOEscrow _escrow) {
-        if (address(_escrow) != address(0)) {
-            escrow = _escrow;
+    constructor() {
             owner = msg.sender;
-            emit EscrowSet(address(_escrow));
-        }
     }
 
     /// @notice Owner can set or update the escrow contract address

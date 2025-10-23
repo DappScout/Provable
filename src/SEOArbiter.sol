@@ -15,8 +15,7 @@ contract SEOArbiter {
     event ArbiterAdded(address indexed arbiter);
     event ArbiterRemoved(address indexed arbiter);
 
-    constructor(address _escrow) {
-        escrow = SEOEscrow(_escrow);
+    constructor() {
         owner = msg.sender;
     }
 
@@ -28,6 +27,11 @@ contract SEOArbiter {
     modifier onlyArbiter() {
         require(isArbiter[msg.sender], "Not arbiter");
         _;
+    }
+
+    function setEscrow(SEOEscrow _escrow) external onlyOwner {
+        require(address(_escrow) != address(0), "SEOFinance: zero escrow");
+        escrow = _escrow;
     }
 
     function addArbiter(address _arbiter) external onlyOwner {
