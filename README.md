@@ -3,11 +3,15 @@
 > A trustless escrow system for SEO services with automated, verifiable performance validation.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Solidity](https://img.shields.io/badge/Solidity-^0.8.20-blue)](https://soliditylang.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-^0.8.30-blue)](https://soliditylang.org/)
+[![Base](https://img.shields.io/badge/Deployed_on-Base-blue)](https://www.base.org/)
 [![Chainlink](https://img.shields.io/badge/Chainlink-Powered-red)](https://chain.link/)
 
 ---
+![Tests](https://github.com/DappScout/Provable/actions/workflows/Tests.yml/badge.svg)
+![Documentation](https://github.com/DappScout/Provable/actions/workflows/Docs.yml/badge.svg)
 
+---
 ## 🎯 What is Provable?
 
 **Provable** is a decentralized protocol that eliminates trust issues in SEO service agreements by using smart contracts and oracle-based validation. It ensures that SEO specialists only get paid when they deliver measurable, verifiable results.
