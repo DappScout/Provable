@@ -27,3 +27,12 @@ TECH_STACK.md
 
 .cursor/rules/appdesignrules.mdc
 .cursor/rules/reactnativedevelopmentrules.mdc
+
+/AIs/
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# Node modules
+node_modules/
