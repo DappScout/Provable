@@ -6,16 +6,22 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./SEOEscrow.sol";
+import "./Constants.sol";
 
 /**
  * @title SEOFinance
  * @notice Handles all token/ETH custody & release logic for the SEO-Escrow system.
  */
-contract SEOFinance is ReentrancyGuard {
+contract SEOFinance is Constants, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     SEOEscrow public escrow;
     address public owner;
+
+    uint256 public feeAmountETH;
+    uint256 public feeAmountERC20;
+
+    address public feeCollector;
 
     mapping(uint256 => mapping(address => uint256)) private _balances;
 
@@ -37,8 +43,9 @@ contract SEOFinance is ReentrancyGuard {
         _;
     }
 
-    constructor() {
-            owner = msg.sender;
+    constructor(address _feeCollector) {
+        owner = msg.sender;
+        feeCollector = _feeCollector;
     }
 
     /// @notice Owner can set or update the escrow contract address
@@ -52,14 +59,23 @@ contract SEOFinance is ReentrancyGuard {
         require(amount > 0, "SEOFinance: zero amount");
         require(token != address(0), "SEOFinance: token must be ERC20");
 
-        _balances[jobId][token] += amount;
-        emit ERC20Deposited(jobId, token, amount);
+        uint256 fee = (amount * PLATFORM_FEE_BPS) / BPS_DENOMINATOR;
+        uint256 netAmount = amount - fee;
+
+        _balances[jobId][token] += netAmount;
+        feeAmountERC20 += fee;
+        emit ERC20Deposited(jobId, token, netAmount);
     }
 
     function depositETH(uint256 jobId) external payable nonReentrant onlyEscrow {
         require(msg.value > 0, "SEOFinance: zero ETH");
-        _balances[jobId][address(0)] += msg.value;
-        emit ETHDeposited(jobId, msg.value);
+
+        uint256 fee = (msg.value * PLATFORM_FEE_BPS) / BPS_DENOMINATOR;
+        uint256 netAmount = msg.value - fee;
+
+        _balances[jobId][address(0)] += netAmount;
+        feeAmountETH += fee;
+        emit ETHDeposited(jobId, netAmount);
     }
 
     function releaseERC20(uint256 jobId, address token, address to, uint256 amount) external nonReentrant onlyEscrow {
@@ -101,6 +117,27 @@ contract SEOFinance is ReentrancyGuard {
         uint256 balance = address(this).balance;
         (bool ok,) = to.call{value: balance}("");
         require(ok, "SEOFinance: sweep ETH failed");
+    }
+
+    function claimFees(address token) external {
+        require(feeCollector != address(0), "SEOFinance: feeCollector not set");
+
+        if (token == address(0)) {
+            uint256 ethFees = feeAmountETH;
+            feeAmountETH = 0;
+            (bool ok,) = payable(feeCollector).call{value: ethFees}("");
+            require(ok, "SEOFinance: ETH fee transfer failed");
+        } else {
+            uint256 erc20Fees = feeAmountERC20;
+            feeAmountERC20 = 0;
+            IERC20(token).safeTransfer(feeCollector, erc20Fees);
+        }
+        
+    }
+
+    function setFeeCollector(address _feeCollector) external onlyOwner {
+        require(_feeCollector != address(0), "Zero address");
+        feeCollector = _feeCollector;
     }
 
     receive() external payable {}

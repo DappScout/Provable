@@ -42,6 +42,7 @@ contract SEOEscrow is Constants, ReentrancyGuard {
     }
 
     uint256 public jobCount;
+
     mapping(uint256 => Job) public jobs;
     mapping(address => uint256) public jobsPerClient;
 
@@ -96,6 +97,7 @@ contract SEOEscrow is Constants, ReentrancyGuard {
         require(_deadline > block.timestamp, "Deadline must be in future");
         require(_freelancer != address(0), "Freelancer cannot be zero");
         require(_freelancer != msg.sender, "Freelancer cannot be client");
+
         if (_token != address(0)) {
             require(registry.isAllowed(_token), "Token not allowed");
         }
@@ -119,28 +121,9 @@ contract SEOEscrow is Constants, ReentrancyGuard {
 
         jobsPerClient[msg.sender]++;
 
-        // if (_token == address(0)) {
-        //     require(_budget >= MIN_BUDGET, "Below minimum budget");
-        // } else {
-        //     _checkMinBudget(_token, _budget);
-        // }
-
         emit JobCreated(jobCount, msg.sender, _freelancer, _token, _budget);
         return jobCount;
     }
-
-    // function _checkMinBudget(address token, uint256 _budget) internal view {
-    //     uint256 tokenDecimals = 18; // default fallback
-
-    //     (bool success, bytes memory data) = token.staticcall(abi.encodeWithSignature("decimals()"));
-
-    //     if (success && data.length == 32) {
-    //         tokenDecimals = abi.decode(data, (uint256));
-    //     }
-
-    //     uint256 minBudget = 10 ** tokenDecimals;
-    //     require(_budget >= minBudget, "Below minimum ERC20 budget");
-    // }
 
     // freelancer accepts the job and signs the contract
     function signContract(uint256 jobId) external inState(jobId, JobState.Created) onlyFreelancer(jobId) {
@@ -161,6 +144,9 @@ contract SEOEscrow is Constants, ReentrancyGuard {
         Job storage j = jobs[jobId];
         require(amount == j.budget, "Must pay full budget");
 
+        uint256 fee = (amount * PLATFORM_FEE_BPS) / BPS_DENOMINATOR;
+        uint256 netAmount = amount - fee;
+
         if (j.token == address(0)) {
             require(msg.value == amount, "ETH mismatch");
             finance.depositETH{value: amount}(jobId);
@@ -170,7 +156,7 @@ contract SEOEscrow is Constants, ReentrancyGuard {
             finance.depositERC20(jobId, j.token, amount);
         }
 
-        j.lockedAmount = amount;
+        j.lockedAmount = netAmount;
         j.state = JobState.Funded;
         j.clientLocked = true;
 
@@ -233,4 +219,5 @@ contract SEOEscrow is Constants, ReentrancyGuard {
         jobsPerClient[msg.sender]--;
         emit JobCancelled(jobId);
     }
+
 }

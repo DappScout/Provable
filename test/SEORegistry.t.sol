@@ -10,12 +10,12 @@ contract SEORegistryTest is BaseTest {
 
     function test_AllowToken() public {
         address newToken = makeAddr("newToken");
-        
+
         vm.prank(registry.owner());
         registry.allowToken(newToken, "TEST", 18);
-        
+
         assertTrue(registry.isAllowed(newToken));
-        
+
         (string memory symbol, uint8 decimals, bool active) = registry.tokenInfo(newToken);
         assertEq(symbol, "TEST");
         assertEq(decimals, 18);
@@ -24,12 +24,12 @@ contract SEORegistryTest is BaseTest {
 
     function test_DisallowToken() public {
         address newToken = makeAddr("newToken");
-        
+
         vm.startPrank(registry.owner());
         registry.allowToken(newToken, "TEST", 18);
         registry.disallowToken(newToken);
         vm.stopPrank();
-        
+
         assertFalse(registry.isAllowed(newToken));
         (,, bool active) = registry.tokenInfo(newToken);
         assertFalse(active);
