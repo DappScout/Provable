@@ -2,8 +2,10 @@
 pragma solidity 0.8.30;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
 import "./SEOFinance.sol";
 import "./SEOArbiter.sol";
 import "./Constants.sol";
@@ -12,8 +14,9 @@ import "./SEORegistry.sol";
 /**
  * @title SEOEscrow
  * @notice Main contract that manages job lifecycle and delegates payment logic to SEOFinance.
+ * @dev Implements Chainlink Automation for automatic job completion after review period
  */
-contract SEOEscrow is Constants, ReentrancyGuard {
+contract SEOEscrow is Constants, ReentrancyGuard, AutomationCompatibleInterface {
     using SafeERC20 for IERC20;
 
     enum JobState {
@@ -60,6 +63,7 @@ contract SEOEscrow is Constants, ReentrancyGuard {
     event DisputeOpened(uint256 indexed jobId, address indexed by);
     event DisputeResolved(uint256 indexed jobId, uint256 clientAmount, uint256 freelancerAmount);
     event JobCancelled(uint256 indexed jobId);
+    event JobAutoCompleted(uint256 indexed jobId);
 
     constructor(address payable _finance, address _arbiter, address _registry) {
         require(_finance != address(0) && _arbiter != address(0) && _registry != address(0), "Zero address not allowed");
@@ -218,6 +222,78 @@ contract SEOEscrow is Constants, ReentrancyGuard {
         j.state = JobState.Cancelled;
         jobsPerClient[msg.sender]--;
         emit JobCancelled(jobId);
+    }
+
+    // ============================================
+    // CHAINLINK AUTOMATION FUNCTIONS
+    // ============================================
+
+    /**
+     * @notice Chainlink Automation calls this to check if upkeep is needed
+     * @dev Checks jobs in reverse order (newest first) for completed jobs past review period
+     * @return upkeepNeeded True if any jobs need auto-completion
+     * @return performData Encoded array of job IDs to process
+     */
+    function checkUpkeep(bytes calldata /* checkData */)
+        external
+        view
+        override
+        returns (bool upkeepNeeded, bytes memory performData)
+    {
+        uint256[] memory jobsToProcess = new uint256[](MAX_JOBS_TO_CHECK);
+        uint256 count = 0;
+
+        // Start from most recent jobs (more likely to need action)
+        for (uint256 i = jobCount; i > 0 && count < MAX_JOBS_TO_CHECK; i--) {
+            Job memory j = jobs[i];
+
+            // Auto-release if review period expired after freelancer marked complete
+            if (j.state == JobState.Completed && block.timestamp > j.completedAt + REVIEW_PERIOD) {
+                jobsToProcess[count++] = i;
+            }
+        }
+
+        upkeepNeeded = count > 0;
+        performData = abi.encode(jobsToProcess, count);
+    }
+
+    /**
+     * @notice Chainlink Automation calls this to perform the upkeep
+     * @dev Auto-confirms jobs that have passed the review period
+     * @param performData Encoded array of job IDs and count from checkUpkeep
+     */
+    function performUpkeep(bytes calldata performData) external override nonReentrant {
+        (uint256[] memory jobsToProcess, uint256 count) = abi.decode(performData, (uint256[], uint256));
+
+        for (uint256 i = 0; i < count; i++) {
+            uint256 jobId = jobsToProcess[i];
+            Job storage j = jobs[jobId];
+
+            // Verify state hasn't changed and review period has passed
+            if (j.state == JobState.Completed && block.timestamp > j.completedAt + REVIEW_PERIOD) {
+                _autoConfirmJob(jobId);
+            }
+        }
+    }
+
+    /**
+     * @notice Internal function to auto-confirm and release funds to freelancer
+     * @param jobId The job ID to auto-confirm
+     */
+    function _autoConfirmJob(uint256 jobId) internal {
+        Job storage j = jobs[jobId];
+        j.state = JobState.JobDone;
+
+        if (j.token == address(0)) {
+            finance.releaseETH(jobId, payable(j.freelancer), j.lockedAmount);
+        } else {
+            finance.releaseERC20(jobId, j.token, j.freelancer, j.lockedAmount);
+        }
+
+        j.lockedAmount = 0;
+        jobsPerClient[j.client]--;
+
+        emit JobAutoCompleted(jobId);
     }
 
 }

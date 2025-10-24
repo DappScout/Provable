@@ -29,6 +29,7 @@ TECH_STACK.md
 .cursor/rules/reactnativedevelopmentrules.mdc
 
 /AIs/
+src/Example/
 
 # macOS system files
 .DS_Store
