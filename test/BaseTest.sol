@@ -6,6 +6,7 @@ import "../src/SEOEscrow.sol";
 import "../src/SEOFinance.sol";
 import "../src/SEOArbiter.sol";
 import "../src/SEORegistry.sol";
+import "../src/Constants.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract MockERC20 is ERC20 {
@@ -19,6 +20,7 @@ contract BaseTest is Test {
     SEOFinance finance;
     SEOArbiter arbiter;
     SEORegistry registry;
+    Constants constants;
     MockERC20 token;
 
     address client;
@@ -38,6 +40,7 @@ contract BaseTest is Test {
         finance = new SEOFinance(feeCollector);
         registry = new SEORegistry(address(token));
         arbiter = new SEOArbiter();
+        constants = new Constants();
         escrow = new SEOEscrow(payable(address(finance)), address(arbiter), address(registry));
 
         // Configure contracts
