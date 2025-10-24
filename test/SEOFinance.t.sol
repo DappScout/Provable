@@ -8,38 +8,67 @@ contract SEOFinanceTest is BaseTest {
         super.setUp();
     }
 
-    // function test_DepositAndReleaseETH() public {
-    //     uint256 amount = 1 ether;
-    //     uint256 jobId = 1;
+    function test_ETHFeeCollection() public {
+        uint256 budget = 1 ether;
+        uint256 deadline = block.timestamp + 1 days;
 
-    //     vm.deal(address(this), amount);
-    //     finance.depositETH{value: amount}(jobId);
+        // Create job
+        vm.startPrank(client);
+        uint256 jobId = escrow.createAJob(address(0), freelancer, budget, deadline);
+        vm.stopPrank();
 
-    //     assertEq(finance.balanceOf(jobId, address(0)), amount);
+        vm.prank(freelancer);
+        escrow.signContract(jobId);
 
-    //     address payable recipient = payable(makeAddr("recipient"));
-    //     finance.releaseETH(jobId, recipient, amount);
+        vm.prank(client);
+        escrow.payAndLockFunds{value: budget}(jobId, budget);
 
-    //     assertEq(recipient.balance, amount);
-    //     assertEq(finance.balanceOf(jobId, address(0)), 0);
-    // }
+        uint256 expectedFee = (budget * constants.PLATFORM_FEE_BPS()) / 10000;
+        assertEq(finance.feeAmountETH(), expectedFee);
 
-    // function test_DepositAndReleaseERC20() public {
-    //     uint256 amount = 1000 * 10**18;
-    //     uint256 jobId = 1;
+        uint256 feeCollectorBalanceBefore = feeCollector.balance;
+        vm.prank(feeCollector);
+        finance.claimFees(address(0));
+        assertEq(feeCollector.balance - feeCollectorBalanceBefore, expectedFee);
+    }
 
-    //     token.approve(address(finance), amount);
-    //     token.transfer(address(this), amount);
+    function test_ERC20FeeCollection() public {
+        uint256 budget = 1000 * 10 ** 18;
+        uint256 deadline = block.timestamp + 1 days;
 
-    //     finance.depositERC20(jobId, address(token), amount);
-    //     assertEq(finance.balanceOf(jobId, address(token)), amount);
+        // Create job
+        vm.startPrank(client);
+        uint256 jobId = escrow.createAJob(address(token), freelancer, budget, deadline);
+        vm.stopPrank();
 
-    //     address recipient = makeAddr("recipient");
-    //     finance.releaseERC20(jobId, address(token), recipient, amount);
+        vm.prank(freelancer);
+        escrow.signContract(jobId);
 
-    //     assertEq(token.balanceOf(recipient), amount);
-    //     assertEq(finance.balanceOf(jobId, address(token)), 0);
-    // }
+        vm.startPrank(client);
+        token.approve(address(escrow), budget);
+        escrow.payAndLockFunds(jobId, budget);
+        vm.stopPrank();
 
-    // add more extensive tests
+        uint256 expectedFee = (budget * constants.PLATFORM_FEE_BPS()) / 10000;
+        assertEq(finance.feeAmountERC20(address(token)), expectedFee);
+
+        uint256 feeCollectorBalanceBefore = token.balanceOf(feeCollector);
+        vm.prank(feeCollector);
+        finance.claimFees(address(token));
+        assertEq(token.balanceOf(feeCollector) - feeCollectorBalanceBefore, expectedFee);
+    }
+
+    function test_NonFeeCollectorClaimFees() public {
+        vm.prank(makeAddr("notFeeCollector"));
+        vm.expectRevert();
+        finance.claimFees(address(0));
+    }
+
+    function testSetFeeCollector() public {
+        address newFeeCollector = makeAddr("newFeeCollector");
+        vm.prank(finance.owner());
+        finance.setFeeCollector(newFeeCollector);
+        assertEq(finance.feeCollector(), newFeeCollector);
+    }
+    
 }

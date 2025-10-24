@@ -296,4 +296,36 @@ contract SEOEscrow is Constants, ReentrancyGuard, AutomationCompatibleInterface 
         emit JobAutoCompleted(jobId);
     }
 
+    function getJob(uint256 jobId)
+        external
+        view
+        returns (
+            address client,
+            address freelancer,
+            address token,
+            uint256 budget,
+            uint256 createdAt,
+            uint256 deadline,
+            uint256 completedAt,
+            JobState state,
+            bool clientLocked,
+            bool freelancerLocked,
+            uint256 lockedAmount
+        )
+    {
+        Job storage j = jobs[jobId];
+        return (
+            j.client,
+            j.freelancer,
+            j.token,
+            j.budget,
+            j.createdAt,
+            j.deadline,
+            j.completedAt,
+            j.state,
+            j.clientLocked,
+            j.freelancerLocked,
+            j.lockedAmount
+        );
+    }
 }
