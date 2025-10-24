@@ -37,3 +37,7 @@ src/Example/
 
 # Node modules
 node_modules/
+
+broadcast/
+
+DEPLOYMENT_GUIDE.md
