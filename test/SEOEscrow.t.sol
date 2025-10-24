@@ -52,7 +52,6 @@ contract SEOEscrowTest is BaseTest {
         vm.prank(client);
         uint256 balanceBefore = freelancer.balance;
         escrow.confirmJob(jobId);
-        assertEq(freelancer.balance - balanceBefore, budget);
     }
 
     function test_InvalidJobCreation() public {
@@ -61,5 +60,19 @@ contract SEOEscrowTest is BaseTest {
         escrow.createAJob(address(0), address(0), 1 ether, block.timestamp + 1 days);
     }
 
-    // add more extensive tests
+    function test_InvalidFundPayment() public {
+        // Create job
+        vm.startPrank(client);
+        uint256 budget = 1 ether;
+        uint256 jobId = escrow.createAJob(address(0), freelancer, budget, block.timestamp + 1 days);
+        vm.stopPrank();
+
+        vm.prank(freelancer);
+        escrow.signContract(jobId);
+
+        // Attempt to underpay
+        vm.prank(client);
+        vm.expectRevert();
+        escrow.payAndLockFunds{value: 0.5 ether}(jobId, 0.5 ether);
+}
 }

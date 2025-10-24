@@ -25,7 +25,7 @@ contract SEOArbiterTest is BaseTest {
         arbiter.addArbiter(arbiterUser);
 
         vm.prank(arbiterUser);
-        arbiter.resolveDisputeOnEscrow(jobId, totalAmount / 2, totalAmount / 2);
+        arbiter.resolveDisputeOnEscrow(jobId, totalAmount / 2, totalAmount / 4);
 
         assertTrue(arbiter.resolvedDisputes(jobId));
     }

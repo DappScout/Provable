@@ -19,7 +19,7 @@ contract SEOFinance is Constants, ReentrancyGuard {
     address public owner;
 
     uint256 public feeAmountETH;
-    uint256 public feeAmountERC20;
+    mapping(address => uint256) public feeAmountERC20;
 
     address public feeCollector;
 
@@ -63,7 +63,7 @@ contract SEOFinance is Constants, ReentrancyGuard {
         uint256 netAmount = amount - fee;
 
         _balances[jobId][token] += netAmount;
-        feeAmountERC20 += fee;
+        feeAmountERC20[token] += fee;
         emit ERC20Deposited(jobId, token, netAmount);
     }
 
@@ -121,6 +121,7 @@ contract SEOFinance is Constants, ReentrancyGuard {
 
     function claimFees(address token) external {
         require(feeCollector != address(0), "SEOFinance: feeCollector not set");
+        require(msg.sender == feeCollector, "SEOFinance: not feeCollector");
 
         if (token == address(0)) {
             uint256 ethFees = feeAmountETH;
@@ -128,11 +129,10 @@ contract SEOFinance is Constants, ReentrancyGuard {
             (bool ok,) = payable(feeCollector).call{value: ethFees}("");
             require(ok, "SEOFinance: ETH fee transfer failed");
         } else {
-            uint256 erc20Fees = feeAmountERC20;
-            feeAmountERC20 = 0;
+            uint256 erc20Fees = feeAmountERC20[token];
+            feeAmountERC20[token] = 0;
             IERC20(token).safeTransfer(feeCollector, erc20Fees);
         }
-        
     }
 
     function setFeeCollector(address _feeCollector) external onlyOwner {
