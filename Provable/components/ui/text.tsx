@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-interface TextProps {
+interface TextProps extends React.HTMLAttributes<HTMLElement> {
   children?: React.ReactNode;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   color?: "primary" | "secondary" | "tertiary";
@@ -12,7 +12,6 @@ interface TextProps {
   isTruncated?: boolean;
   className?: string;
   as?: "span" | "p" | "div";
-  [key: string]: any;
 }
 
 const sizeClasses = {

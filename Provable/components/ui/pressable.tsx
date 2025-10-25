@@ -1,10 +1,9 @@
 import React from "react";
 
-interface PressableProps {
+interface PressableProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   onPress?: () => void;
   className?: string;
-  [key: string]: any;
 }
 
 export function Pressable({ children, onPress, className, ...props }: PressableProps) {

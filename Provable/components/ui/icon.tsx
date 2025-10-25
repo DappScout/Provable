@@ -3,11 +3,10 @@ import { GoHome } from "react-icons/go";
 import { HiArrowsRightLeft } from "react-icons/hi2";
 import { BsPerson } from "react-icons/bs";
 
-interface IconProps {
-  as: React.ComponentType<any>;
+interface IconProps extends React.SVGAttributes<SVGElement> {
+  as: React.ComponentType<React.SVGAttributes<SVGElement>>;
   size?: "2xs" | "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
-  [key: string]: any;
 }
 
 const sizeClasses = {
@@ -31,7 +30,7 @@ export function Icon({ as: IconComponent, size = "md", className, ...props }: Ic
 }
 
 // Home Icon - using GoHome from react-icons
-export function HomeIcon({ className, ...props }: any) {
+export function HomeIcon({ className, ...props }: React.SVGAttributes<SVGElement>) {
   return (
     <GoHome 
       className={className}
@@ -41,7 +40,7 @@ export function HomeIcon({ className, ...props }: any) {
 }
 
 // Offers Icon - using HiArrowsRightLeft from react-icons
-export function OffersIcon({ className, ...props }: any) {
+export function OffersIcon({ className, ...props }: React.SVGAttributes<SVGElement>) {
   return (
     <HiArrowsRightLeft 
       className={className}
@@ -51,7 +50,7 @@ export function OffersIcon({ className, ...props }: any) {
 }
 
 // Profile Icon - using BsPerson from react-icons
-export function ProfileIcon({ className, ...props }: any) {
+export function ProfileIcon({ className, ...props }: React.SVGAttributes<SVGElement>) {
   return (
     <BsPerson 
       className={className}

@@ -1,9 +1,8 @@
 import React from "react";
 
-interface BoxProps {
+interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   className?: string;
-  [key: string]: any;
 }
 
 export function Box({ children, className, ...props }: BoxProps) {

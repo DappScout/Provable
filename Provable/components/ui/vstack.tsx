@@ -1,11 +1,10 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-interface VStackProps {
+interface VStackProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   space?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   className?: string;
-  [key: string]: any;
 }
 
 const spaceClasses = {
