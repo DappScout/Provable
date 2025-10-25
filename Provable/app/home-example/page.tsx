@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 
-export default function HomePage() {
+export default function HomeExample() {
   return (
     <div className="min-h-screen bg-[#121212]">
       {/* Main Content */}
@@ -108,3 +108,4 @@ export default function HomePage() {
     </div>
   );
 }
+

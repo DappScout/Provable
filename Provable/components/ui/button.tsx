@@ -29,7 +29,7 @@ export function Button({
     h-12 px-6
     font-semibold rounded
     transition-all duration-200
-    focus:outline-none
+    focus:outline-none focus:ring-2 focus:ring-[--color-primary-turquoise] focus:ring-offset-2 focus:ring-offset-[--color-bg-dark]
     disabled:cursor-not-allowed
     hover:opacity-90
     active:scale-95
@@ -46,30 +46,30 @@ export function Button({
   // Variant classes based on Button_types.md specifications
   const variantClasses = {
     primary: `
-      text-[#2C2C2C] 
-      bg-gradient-to-r from-[#98F7E9] to-[#19D1B6]
+      text-[--color-text-tertiary] 
+      bg-gradient-to-r from-[--color-primary-gradient-start] to-[--color-primary-gradient-end]
       border-none
     `,
     secondary: `
-      text-[#98F7E9] 
+      text-[--color-primary-turquoise] 
       bg-transparent 
-      border border-[#98F7E9]
+      border border-[--color-primary-turquoise]
     `,
     alt1: `
-      text-white 
+      text-[--color-text-primary] 
       bg-transparent 
       border-none 
       underline
     `,
     alt2: `
-      text-[#FF6A6A] 
+      text-[--color-error] 
       bg-transparent 
       border-none 
       underline
     `,
     round: `
-      text-[#2C2C2C] 
-      bg-gradient-to-r from-[#98F7E9] to-[#19D1B6]
+      text-[--color-text-tertiary] 
+      bg-gradient-to-r from-[--color-primary-gradient-start] to-[--color-primary-gradient-end]
       border-none
       rounded-full
     `,
@@ -77,9 +77,9 @@ export function Button({
 
   // Disabled state overrides all other variants
   const disabledClasses = disabled ? `
-    text-[#6D6D6D] 
+    text-[--color-disabled] 
     bg-transparent 
-    border border-[#6D6D6D]
+    border border-[--color-disabled]
     cursor-not-allowed
     opacity-50
   ` : '';
