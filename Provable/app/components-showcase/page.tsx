@@ -135,7 +135,7 @@ export default function ComponentsShowcase() {
                     <DatePicker
                       label="Select a date"
                       value={selectedDate}
-                      onChange={setSelectedDate}
+                      onChange={(date) => setSelectedDate(date ?? undefined)}
                       placeholder="Choose a date"
                     />
                   </VStack>
