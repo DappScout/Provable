@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react';
 export interface FabProps {
   onClick?: () => void;
   icon?: React.ReactNode;
+  children?: React.ReactNode;
   size?: 'small' | 'medium' | 'large';
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   className?: string;
@@ -14,6 +15,7 @@ export interface FabProps {
 export function Fab({
   onClick,
   icon,
+  children,
   size = 'medium',
   position = 'bottom-right',
   className,
@@ -55,7 +57,7 @@ export function Fab({
         className
       )}
     >
-      {icon || <Plus className={iconSizes[size]} />}
+      {children || icon || <Plus className={iconSizes[size]} />}
     </button>
   );
 }
