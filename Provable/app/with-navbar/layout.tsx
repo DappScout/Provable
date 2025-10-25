@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import BottomNavbar from "../../components/BottomNavbar";
 
