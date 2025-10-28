@@ -7,18 +7,15 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardFooter,
-  OfferCard,
   StatCard,
   Tabs,
-  PillToggle,
   ProgressBar,
   InfoRow,
   Badge,
   VStack,
   HStack
 } from '@/components/ui';
-import { ArrowLeft, MessageCircle, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { ArrowLeft, MessageCircle, CheckCircle, Clock } from 'lucide-react';
 
 export default function OffersExample() {
   const [activeTab, setActiveTab] = useState('details');
@@ -306,7 +303,7 @@ export default function OffersExample() {
                           </VStack>
                         </HStack>
                         <Text size="sm" color="secondary" className="ml-10">
-                          Thanks Adam! I've completed the content optimization for 15 of the 20 target pages. Should have the remaining 5 done by end of day tomorrow.
+                          Thanks Adam! I&apos;ve completed the content optimization for 15 of the 20 target pages. Should have the remaining 5 done by end of day tomorrow.
                         </Text>
                       </VStack>
 

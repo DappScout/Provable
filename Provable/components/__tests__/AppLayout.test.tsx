@@ -27,7 +27,7 @@ describe('AppLayout Component', () => {
       back: jest.fn(),
       forward: jest.fn(),
       prefetch: jest.fn(),
-    } as any);
+    } as unknown as ReturnType<typeof useRouter>);
 
     // Setup BottomNavbar mock to render a simple div
     MockBottomNavbar.mockImplementation(({ onNavigate, activeRoute }) => (
@@ -436,7 +436,7 @@ describe('AppLayout Component', () => {
 
   describe('Edge Cases and Error Handling', () => {
     it('should handle null pathname gracefully', () => {
-      mockUsePathname.mockReturnValue(null as any);
+      mockUsePathname.mockReturnValue(null as unknown as string);
       
       render(
         <AppLayout>
@@ -450,7 +450,7 @@ describe('AppLayout Component', () => {
     });
 
     it('should handle undefined pathname gracefully', () => {
-      mockUsePathname.mockReturnValue(undefined as any);
+      mockUsePathname.mockReturnValue(undefined as unknown as string);
       
       render(
         <AppLayout>

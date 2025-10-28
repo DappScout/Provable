@@ -7,7 +7,6 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardFooter,
   Avatar,
   Badge,
   ProgressBar,
@@ -19,7 +18,7 @@ import {
   Modal,
   ModalFooter
 } from '@/components/ui';
-import { Edit, Settings, Award, TrendingUp, DollarSign, Users, Star } from 'lucide-react';
+import { Edit, Award, Star } from 'lucide-react';
 
 export default function ProfileExample() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -270,7 +269,7 @@ export default function ProfileExample() {
                         <Text size="xs" color="secondary" className="ml-auto">2 weeks ago</Text>
                       </HStack>
                       <Text size="sm" color="secondary">
-                        "Sarah is an exceptional SEO specialist. She delivered exactly what was promised and the results exceeded our expectations. Highly recommend!"
+                        &quot;Sarah is an exceptional SEO specialist. She delivered exactly what was promised and the results exceeded our expectations. Highly recommend!&quot;
                       </Text>
                     </VStack>
 
@@ -288,7 +287,7 @@ export default function ProfileExample() {
                         <Text size="xs" color="secondary" className="ml-auto">1 month ago</Text>
                       </HStack>
                       <Text size="sm" color="secondary">
-                        "Professional, knowledgeable, and great communicator. Our organic traffic increased by 150% in just 4 months. Will definitely work with again."
+                        &quot;Professional, knowledgeable, and great communicator. Our organic traffic increased by 150% in just 4 months. Will definitely work with again.&quot;
                       </Text>
                     </VStack>
 
@@ -307,7 +306,7 @@ export default function ProfileExample() {
                         <Text size="xs" color="secondary" className="ml-auto">2 months ago</Text>
                       </HStack>
                       <Text size="sm" color="secondary">
-                        "Very satisfied with the technical SEO work. Site speed improved significantly and rankings are moving up. Only minor issue was with communication timing."
+                        &quot;Very satisfied with the technical SEO work. Site speed improved significantly and rankings are moving up. Only minor issue was with communication timing.&quot;
                       </Text>
                     </VStack>
                   </VStack>

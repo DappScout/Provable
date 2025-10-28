@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import { Text } from './text';
-import { Button } from './button';
 import { X } from 'lucide-react';
 
 export interface ModalProps {

@@ -61,7 +61,8 @@ const SplitText: React.FC<SplitTextProps> = ({
       if (el._rbsplitInstance) {
         try {
           el._rbsplitInstance.revert();
-        } catch {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_) {
           // Silently ignore revert errors
         }
         el._rbsplitInstance = undefined;
@@ -128,7 +129,8 @@ const SplitText: React.FC<SplitTextProps> = ({
         });
         try {
           splitInstance.revert();
-        } catch {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_) {
           // Silently ignore revert errors
         }
         el._rbsplitInstance = undefined;

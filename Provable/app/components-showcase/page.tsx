@@ -29,7 +29,7 @@ import {
   VStack,
   HStack
 } from '@/components/ui';
-import { User, Search, TrendingUp, Calendar, Plus } from 'lucide-react';
+import { User, Search, Calendar, Plus } from 'lucide-react';
 
 export default function ComponentsShowcase() {
   const [activeTab, setActiveTab] = useState('forms');
