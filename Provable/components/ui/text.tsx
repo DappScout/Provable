@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-interface TextProps extends React.HTMLAttributes<HTMLElement> {
+interface TextProps {
   children?: React.ReactNode;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   color?: "primary" | "secondary" | "tertiary";
@@ -12,6 +12,14 @@ interface TextProps extends React.HTMLAttributes<HTMLElement> {
   isTruncated?: boolean;
   className?: string;
   as?: "span" | "p" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  style?: React.CSSProperties;
+  id?: string;
+  role?: string;
+  'aria-label'?: string;
+  'data-testid'?: string;
 }
 
 const sizeClasses = {
@@ -48,7 +56,14 @@ export function Text({
   isTruncated = false,
   className,
   as: Component = "span",
-  ...props 
+  onClick,
+  onMouseEnter,
+  onMouseLeave,
+  style,
+  id,
+  role,
+  'aria-label': ariaLabel,
+  'data-testid': dataTestId
 }: TextProps) {
   return (
     <Component 
@@ -62,7 +77,14 @@ export function Text({
         isTruncated && "truncate",
         className
       )}
-      {...props}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={style}
+      id={id}
+      role={role}
+      aria-label={ariaLabel}
+      data-testid={dataTestId}
     >
       {children}
     </Component>

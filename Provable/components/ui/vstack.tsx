@@ -1,10 +1,18 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-interface VStackProps extends React.HTMLAttributes<HTMLDivElement> {
+interface VStackProps {
   children?: React.ReactNode;
   space?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
   className?: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  style?: React.CSSProperties;
+  id?: string;
+  role?: string;
+  'aria-label'?: string;
+  'data-testid'?: string;
 }
 
 const spaceClasses = {
@@ -17,9 +25,19 @@ const spaceClasses = {
   "3xl": "gap-12", // 48px
 };
 
-export function VStack({ children, space = "md", className, ...props }: VStackProps) {
+export function VStack({ children, space = "md", className, onClick, onMouseEnter, onMouseLeave, style, id, role, 'aria-label': ariaLabel, 'data-testid': dataTestId }: VStackProps) {
   return (
-    <div className={cn("flex flex-col", spaceClasses[space], className)} {...props}>
+    <div 
+      className={cn("flex flex-col", spaceClasses[space], className)}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={style}
+      id={id}
+      role={role}
+      aria-label={ariaLabel}
+      data-testid={dataTestId}
+    >
       {children}
     </div>
   );
