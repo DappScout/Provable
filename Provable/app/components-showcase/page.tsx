@@ -268,9 +268,9 @@ export default function ComponentsShowcase() {
                 <VStack space="md">
                   <Text size="sm" weight="medium">Avatar Sizes</Text>
                   <HStack space="md">
-                    <Avatar name="John Doe" size="small" />
-                    <Avatar name="John Doe" size="medium" />
-                    <Avatar name="John Doe" size="large" />
+                    <Avatar name="John Doe" size="sm" />
+                    <Avatar name="John Doe" size="md" />
+                    <Avatar name="John Doe" size="lg" />
                   </HStack>
                 </VStack>
 

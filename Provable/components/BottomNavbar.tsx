@@ -11,10 +11,11 @@ import {
   OffersIcon, 
   ProfileIcon 
 } from "./ui/icon";
+import type { ValidRoute } from "./AppLayout";
 
 interface BottomNavbarProps {
-  onNavigate?: (route: string) => void;
-  activeRoute?: string;
+  onNavigate?: (route: ValidRoute) => void;
+  activeRoute?: ValidRoute;
 }
 
 export default function BottomNavbar({ 
@@ -23,7 +24,11 @@ export default function BottomNavbar({
 }: BottomNavbarProps) {
   const [currentRoute, setCurrentRoute] = useState(activeRoute);
 
-  const navigationItems = [
+  const navigationItems: Array<{
+    id: ValidRoute;
+    label: string;
+    icon: React.ComponentType<React.SVGAttributes<SVGElement>>;
+  }> = [
     {
       id: "home",
       label: "Home",
@@ -41,7 +46,7 @@ export default function BottomNavbar({
     },
   ];
 
-  const handleNavigation = (route: string) => {
+  const handleNavigation = (route: ValidRoute) => {
     setCurrentRoute(route);
     onNavigate?.(route);
   };

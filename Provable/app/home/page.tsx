@@ -20,12 +20,12 @@ export default function HomePage() {
         </div>
             <div className="flex-shrink-0 ml-8">
               {/* SEO 3D Image */}
-              <div className="relative w-[200px] h-[150px]">
+              <div className="relative w-[150px] h-[112px] md:w-[200px] md:h-[150px]">
                 <Image
                   src="/SEO.png"
                   alt="SEO"
                   fill
-                  sizes="200px"
+                  sizes="(max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
                   className="object-contain"
                   priority
                 />

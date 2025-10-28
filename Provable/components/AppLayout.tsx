@@ -7,7 +7,7 @@ interface AppLayoutProps {
 }
 
 // Define valid routes as a union type for type safety
-type ValidRoute = 'home' | 'offers' | 'profile';
+export type ValidRoute = 'home' | 'offers' | 'profile';
 
 // Route configuration - easier to maintain
 const ROUTES: Record<string, ValidRoute> = {

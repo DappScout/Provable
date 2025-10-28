@@ -41,7 +41,7 @@ export function ProfileCard({
         <Avatar 
           src={avatar} 
           name={name} 
-          size="medium"
+          size="md"
           className={isSelected ? "ring-2 ring-[--color-primary-turquoise]" : ""}
         />
         

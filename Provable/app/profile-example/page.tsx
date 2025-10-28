@@ -88,7 +88,7 @@ export default function ProfileExample() {
               <HStack space="lg" className="items-start">
                 <Avatar
                   name={profile.name}
-                  size="large"
+                  size="lg"
                 />
 
                 <VStack space="md" className="flex-1">
@@ -258,7 +258,7 @@ export default function ProfileExample() {
                   <VStack space="lg">
                     <VStack space="md">
                       <HStack space="sm" className="items-center">
-                        <Avatar name="John Smith" size="small" />
+                        <Avatar name="John Smith" size="sm" />
                         <VStack space="xs">
                           <Text size="sm" weight="medium">John Smith</Text>
                           <HStack space="xs">
@@ -276,7 +276,7 @@ export default function ProfileExample() {
 
                     <VStack space="md">
                       <HStack space="sm" className="items-center">
-                        <Avatar name="Emily Chen" size="small" />
+                        <Avatar name="Emily Chen" size="sm" />
                         <VStack space="xs">
                           <Text size="sm" weight="medium">Emily Chen</Text>
                           <HStack space="xs">
@@ -294,7 +294,7 @@ export default function ProfileExample() {
 
                     <VStack space="md">
                       <HStack space="sm" className="items-center">
-                        <Avatar name="Mike Johnson" size="small" />
+                        <Avatar name="Mike Johnson" size="sm" />
                         <VStack space="xs">
                           <Text size="sm" weight="medium">Mike Johnson</Text>
                           <HStack space="xs">

@@ -19,7 +19,7 @@ export function Heading({ children, level = 1, className }: HeadingProps) {
     6: 'sm' as const,    // 14px
   };
 
-  const Component = `h${level}` as keyof JSX.IntrinsicElements;
+  const Component = `h${level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
   return (
     <Text

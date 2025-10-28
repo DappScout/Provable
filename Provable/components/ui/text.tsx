@@ -11,7 +11,7 @@ interface TextProps extends React.HTMLAttributes<HTMLElement> {
   strikeThrough?: boolean;
   isTruncated?: boolean;
   className?: string;
-  as?: "span" | "p" | "div";
+  as?: "span" | "p" | "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
 const sizeClasses = {

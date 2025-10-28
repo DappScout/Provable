@@ -38,7 +38,7 @@ export function ListItem({
       <Avatar 
         src={avatar} 
         name={name} 
-        size="medium"
+        size="md"
         className="mr-3"
       />
       

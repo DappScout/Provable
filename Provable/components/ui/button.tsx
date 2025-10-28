@@ -4,10 +4,11 @@ import React from 'react';
 export interface ButtonProps {
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'alt1' | 'alt2' | 'round';
+  size?: 'sm' | 'md' | 'lg';
   width?: 'auto' | 'full' | 'fit' | string; // Custom width support
   disabled?: boolean;
   loading?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -15,6 +16,7 @@ export interface ButtonProps {
 export function Button({
   children,
   variant = 'primary',
+  size = 'md',
   width = 'auto',
   disabled = false,
   loading = false,
@@ -23,10 +25,16 @@ export function Button({
   style,
   ...props
 }: ButtonProps) {
-  // Base classes - 48px height, 24px horizontal padding, 4px radius, 200ms transition
+  // Size classes
+  const sizeClasses = {
+    sm: 'h-8 px-4 text-sm',
+    md: 'h-12 px-6 text-base',
+    lg: 'h-14 px-8 text-lg',
+  };
+
+  // Base classes - 4px radius, 200ms transition
   const baseClasses = `
     inline-flex items-center justify-center
-    h-12 px-6
     font-semibold rounded
     transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-[--color-primary-turquoise] focus:ring-offset-2 focus:ring-offset-[--color-bg-dark]
@@ -92,6 +100,7 @@ export function Button({
       disabled={isDisabled}
       className={`
         ${baseClasses}
+        ${sizeClasses[size]}
         ${getWidthClasses()}
         ${disabled ? disabledClasses : variantClasses[variant]}
         ${className}

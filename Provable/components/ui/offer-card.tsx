@@ -28,6 +28,17 @@ export function OfferCard({
   onClick,
   className,
 }: OfferCardProps) {
+  // Map offer status to Badge variant
+  const getBadgeVariant = (status: 'complete' | 'pending' | 'draft' | 'disputed'): 'success' | 'info' | 'warning' | 'error' => {
+    const statusMap = {
+      complete: 'success' as const,
+      pending: 'info' as const,
+      draft: 'warning' as const,
+      disputed: 'error' as const,
+    };
+    return statusMap[status];
+  };
+
   return (
     <div
       className={cn(
@@ -55,7 +66,7 @@ export function OfferCard({
         <Avatar 
           src={userAvatar} 
           name={userName} 
-          size="small" 
+          size="sm" 
         />
         <div className="flex-1">
           <Text size="sm" weight="medium">
@@ -70,7 +81,7 @@ export function OfferCard({
       {/* Status Badge */}
       {status && statusText && (
         <div className="flex justify-end">
-          <Badge variant={status}>
+          <Badge variant={getBadgeVariant(status)}>
             {statusText}
           </Badge>
         </div>

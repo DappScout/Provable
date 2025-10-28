@@ -1,11 +1,12 @@
 "use client";
 import { useState } from "react";
 import BottomNavbar from "../../components/BottomNavbar";
+import type { ValidRoute } from "../../components/AppLayout";
 
 export default function TestNavbarPage() {
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState<ValidRoute>("home");
 
-  const handleNavigation = (route: string) => {
+  const handleNavigation = (route: ValidRoute) => {
     setCurrentPage(route);
     console.log(`Navigating to: ${route}`);
   };

@@ -24,7 +24,7 @@ export { NotificationCard } from './notification-card';
 export { SectionHeader } from './section-header';
 export { InfoRow } from './info-row';
 export { Modal, ModalFooter } from './modal';
-export { Fab } from './fab';
+export { Fab, type FabProps } from './fab';
 
 // Utility Components
 export { Text } from './text';
