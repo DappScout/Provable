@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function HomePage() {
   return (
@@ -19,14 +20,24 @@ export default function HomePage() {
               </p>
         </div>
             <div className="flex-shrink-0 ml-8">
-              {/* SEO 3D Image */}
+              {/* SEO 3D Image with Glow Effect */}
               <div className="relative w-[150px] h-[112px] md:w-[200px] md:h-[150px]">
+                {/* Blurred duplicate for glow effect */}
+                <Image
+                  src="/SEO.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
+                  className="object-contain blur-lg opacity-60 scale-110"
+                  priority
+                />
+                {/* Main image */}
                 <Image
                   src="/SEO.png"
                   alt="SEO"
                   fill
                   sizes="(max-width: 768px) 200px, (max-width: 1024px) 250px, 300px"
-                  className="object-contain"
+                  className="object-contain relative z-10"
                   priority
                 />
               </div>
@@ -76,15 +87,26 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Target with Arrow 3D Image */}
+            {/* Target with Arrow 3D Image with Glow Effect */}
             <div className="flex-shrink-0 ml-12 mt-4">
-              <div className="relative w-48 h-48">
+            <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48">
+                {/* Blurred duplicate for glow effect */}
                 <Image
-                  src="/Arrow.png"
-                  alt="Target with arrow"
-                  fill
-                  sizes="192px"
-                  className="object-contain"
+                 src="/Arrow.png"
+                 alt=""
+                 fill
+                 sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
+                 className="object-contain blur-lg opacity-60 scale-110"
+                 priority
+                />
+                {/* Main image */}
+                <Image
+                 src="/Arrow.png"
+                 alt="Target with arrow"
+                 fill
+                 sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
+                 className="object-contain relative z-10"
+                 priority
                 />
               </div>
             </div>
@@ -92,9 +114,13 @@ export default function HomePage() {
 
           {/* Create Offer Button */}
           <div className="mt-16 flex justify-center">
-            <button className="bg-[#6DD4C5] hover:bg-[#5EC3B4] text-[#121212] text-lg font-semibold px-12 py-4 rounded-3xl transition-colors">
-              Create an offer
-            </button>
+          <Button 
+             variant="round"     // or "primary", "secondary"
+             size="lg"           // or "sm", "md" 
+             width="auto"        // or "full", "fit", "300px"
+           >
+             Create an offer
+           </Button>
           </div>
         </div>
       </div>
