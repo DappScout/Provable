@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "@farcaster/miniapp-sdk": "^0.2.1"
+  },
+  "devDependencies": {
+    "shadcn": "^3.5.0"
   }
 }

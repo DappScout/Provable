@@ -42,4 +42,6 @@ broadcast/
 
 DEPLOYMENT_GUIDE.md
 
-/Mocks/
+Provable/Mocks
+
+.vscode/

@@ -50,63 +50,62 @@ export default function HomePage() {
           <h2 className="text-white text-3xl font-bold mb-12">
             How it works
           </h2>
-
           <div className="flex items-start justify-between">
-            {/* Steps List */}
-            <div className="flex-1 space-y-8">
+            {/* Steps List - Takes 2/3 width for better text flow */}
+            <div className="w-2/3 pr-8 space-y-4">
               {/* Step 1 */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-[#121212] text-xl font-bold">1</span>
                 </div>
-                <p className="text-white text-lg">Find a SEO specialist</p>
-            </div>
+                <p className="text-white text-base leading-relaxed">Find a SEO specialist</p>
+              </div>
 
               {/* Step 2 */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-[#121212] text-xl font-bold">2</span>
                 </div>
-                <p className="text-white text-lg">Agree on budget and timeline</p>
-            </div>
+                <p className="text-white text-base leading-relaxed">Agree on budget and timeline</p>
+              </div>
 
               {/* Step 3 */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-[#121212] text-xl font-bold">3</span>
                 </div>
-                <p className="text-white text-lg">The work gets done</p>
-            </div>
+                <p className="text-white text-base leading-relaxed">The work gets done</p>
+              </div>
 
               {/* Step 4 */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#6DD4C5] flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-[#121212] text-xl font-bold">4</span>
                 </div>
-                <p className="text-white text-lg">You reach website growth your goals</p>
+                <p className="text-white text-base leading-relaxed">You reach website growth your goals</p>
               </div>
             </div>
 
-            {/* Target with Arrow 3D Image with Glow Effect */}
-            <div className="flex-shrink-0 ml-12 mt-4">
-            <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48">
+            {/* Target with Arrow 3D Image */}
+            <div className="w-1/3 flex justify-center">
+              <div className="relative w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48">
                 {/* Blurred duplicate for glow effect */}
                 <Image
-                 src="/Arrow.png"
-                 alt=""
-                 fill
-                 sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
-                 className="object-contain blur-lg opacity-60 scale-110"
-                 priority
+                  src="/Arrow.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
+                  className="object-contain blur-lg opacity-60 scale-110"
+                  priority
                 />
                 {/* Main image */}
                 <Image
-                 src="/Arrow.png"
-                 alt="Target with arrow"
-                 fill
-                 sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
-                 className="object-contain relative z-10"
-                 priority
+                  src="/Arrow.png"
+                  alt="Target with arrow"
+                  fill
+                  sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
+                  className="object-contain relative z-10"
+                  priority
                 />
               </div>
             </div>
@@ -115,7 +114,7 @@ export default function HomePage() {
           {/* Create Offer Button */}
           <div className="mt-16 flex justify-center">
           <Button 
-             variant="round"     // or "primary", "secondary"
+             variant="primary"     // or "primary", "secondary"
              size="lg"           // or "sm", "md" 
              width="auto"        // or "full", "fit", "300px"
            >

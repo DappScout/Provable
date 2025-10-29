@@ -32,12 +32,12 @@ export function Button({
     lg: 'h-14 px-8 text-lg',
   };
 
-  // Base classes - 4px radius, 200ms transition
+  // Base classes - 8px radius per design system, 200ms transition
   const baseClasses = `
     inline-flex items-center justify-center
-    font-semibold rounded
+    font-semibold rounded-lg
     transition-all duration-200
-    focus:outline-none focus:ring-2 focus:ring-[--color-primary-turquoise] focus:ring-offset-2 focus:ring-offset-[--color-bg-dark]
+    focus:outline-none focus:ring-2 focus:ring-offset-2
     disabled:cursor-not-allowed
     hover:opacity-90
     active:scale-95
@@ -51,48 +51,69 @@ export function Button({
     return ''; // Custom width will be handled via style prop
   };
 
-  // Variant classes based on Button_types.md specifications
-  const variantClasses = {
-    primary: `
-      text-[--color-text-tertiary] 
-      bg-gradient-to-r from-[--color-primary-gradient-start] to-[--color-primary-gradient-end]
-      border-none
-    `,
-    secondary: `
-      text-[--color-primary-turquoise] 
-      bg-transparent 
-      border border-[--color-primary-turquoise]
-    `,
-    alt1: `
-      text-[--color-text-primary] 
-      bg-transparent 
-      border-none 
-      underline
-    `,
-    alt2: `
-      text-[--color-error] 
-      bg-transparent 
-      border-none 
-      underline
-    `,
-    round: `
-      text-[--color-text-tertiary] 
-      bg-gradient-to-r from-[--color-primary-gradient-start] to-[--color-primary-gradient-end]
-      border-none
-      rounded-full
-    `,
+  // Variant styles using design system colors
+  const variantStyles: Record<NonNullable<ButtonProps['variant']>, React.CSSProperties> = {
+    primary: {
+      color: '#121212', // Dark text on bright gradient
+      background: 'linear-gradient(to right, #98F7E9, #19D1B6)',
+      border: 'none',
+    },
+    secondary: {
+      color: '#98F7E9',
+      background: 'transparent',
+      border: '1px solid #98F7E9',
+    },
+    alt1: {
+      color: '#FFFFFF',
+      background: 'transparent',
+      border: 'none',
+      textDecoration: 'underline',
+    },
+    alt2: {
+      color: '#F44336',
+      background: 'transparent',
+      border: 'none',
+      textDecoration: 'underline',
+    },
+    round: {
+      color: '#121212', // Dark text on bright gradient
+      background: 'linear-gradient(to right, #98F7E9, #19D1B6)',
+      border: 'none',
+      borderRadius: '9999px',
+    },
   };
 
-  // Disabled state overrides all other variants
-  const disabledClasses = disabled ? `
-    text-[--color-disabled] 
-    bg-transparent 
-    border border-[--color-disabled]
-    cursor-not-allowed
-    opacity-50
-  ` : '';
+  // Get variant-specific Tailwind classes (for non-style properties)
+  const getVariantClasses = (variant: ButtonProps['variant']) => {
+    const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
+      primary: '',
+      secondary: '',
+      alt1: 'underline',
+      alt2: 'underline',
+      round: 'rounded-full',
+    };
+    return variantClasses[variant!] || '';
+  };
+
+  // Disabled state styles
+  const disabledStyles = disabled ? {
+    color: '#6D6D6D',
+    background: 'transparent',
+    border: '1px solid #6D6D6D',
+    cursor: 'not-allowed',
+    opacity: 0.5,
+  } : {};
 
   const isDisabled = disabled || loading;
+
+  // Combine all styles
+  const combinedStyles = {
+    ...(disabled ? disabledStyles : variantStyles[variant]),
+    ...(typeof width === 'string' && width !== 'auto' && width !== 'full' && width !== 'fit' 
+      ? { width } 
+      : {}),
+    ...style
+  };
 
   return (
     <button
@@ -102,15 +123,10 @@ export function Button({
         ${baseClasses}
         ${sizeClasses[size]}
         ${getWidthClasses()}
-        ${disabled ? disabledClasses : variantClasses[variant]}
+        ${getVariantClasses(variant)}
         ${className}
       `}
-      style={{
-        ...(typeof width === 'string' && width !== 'auto' && width !== 'full' && width !== 'fit' 
-          ? { width } 
-          : {}),
-        ...style
-      }}
+      style={combinedStyles}
       {...props}
     >
       <span
