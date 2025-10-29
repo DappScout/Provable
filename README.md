@@ -169,8 +169,8 @@ flowchart TB
     style RefundComplete fill:#19D1B6,color:#ffffff
 ```
 
-**Phase 1 - Manual Period**
-Client creates an offer, SEO specialist signs it, funds are locked, work is completed, and client either pays manually or triggers automated validation.
+**Phase 1 - Manual Period (Currently Implemented)**
+Client creates an offer, SEO specialist signs it, funds are locked, work is completed, and client either pays manually or waits for automatic completion after 7-day review period.
 
 ```mermaid
 flowchart TB
@@ -287,8 +287,8 @@ flowchart TB
             CheckStatus[During 30 days:<br/>Check website status<br/>and fetch validation data<br/>to calculate score]
             SEOSpec3[SEO spec.]
             SEOSpec4[SEO spec.]
-            APICall[Oracle fetches:<br/>• Google Search Console<br/>• SERPApi rankings<br/>• PageSpeed metrics<br/>• Backlink data]
-            ScoreCalc[Calculate weighted score<br/>based on targets:<br/>• Keyword rankings<br/>• Indexed pages<br/>• Core Web Vitals<br/>• Traffic metrics]
+            APICall[Oracle fetches:<br/>• Google Search Console (In Dev)<br/>• SERPApi rankings<br/>• PageSpeed metrics<br/>• Backlink data]
+            ScoreCalc[Calculate weighted score<br/>based on targets:<br/>• Search performance<br/>• Indexed pages<br/>• Core Web Vitals<br/>• Coverage metrics]
             
             StartValidation --> CheckStatus
             Keeper2 --> CheckStatus
@@ -332,18 +332,23 @@ flowchart TB
 
 ---
 
-## 📊 Validation System (Coming in Phase 2)
+## 📊 Validation System (Phase 2 - In Development)
 
 ### Planned Metrics
 
-- **Keyword Rankings** - Position in Google search results
+**Google Search Console Integration (In Development):**
 - **Indexed Pages** - Number of pages indexed by Google
-- **Core Web Vitals** - LCP, FID, CLS scores
-- **Domain Rating** - Backlink authority score
+- **Search Performance** - Clicks, impressions, CTR, average position
+- **Core Web Vitals** - LCP, FID, CLS scores from real user data
+- **Mobile Usability** - Mobile-friendly test results
+- **Coverage Issues** - Index coverage and crawling errors
+
+**Additional Metrics (Future):**
+- **Keyword Rankings** - Position in Google search results (SERPApi)
+- **Domain Rating** - Backlink authority score (third-party APIs)
 - **Technical Score** - SEO audit score (0-100)
 - **Backlinks Count** - Quality backlinks acquired
-- **Page Speed** - Loading time improvements
-- **Mobile Usability** - Mobile-friendly test results
+- **Page Speed** - Loading time improvements (PageSpeed Insights)
 
 ### Weighted Scoring System
 
@@ -374,27 +379,32 @@ Threshold set at contract creation (e.g., 70%). Score ≥ Threshold = SEO gets p
 ### Core Smart Contracts
 
 **Currently Implemented:**
-- `SEOEscrow.sol` - Main escrow logic, job lifecycle and state management
-- `SEOFinance.sol` - Financial custody for ETH and ERC20 tokens
+- `SEOEscrow.sol` - Main escrow logic with Chainlink Automation integration
+- `SEOFinance.sol` - Financial custody for ETH and ERC20 tokens with fee system
 - `SEOArbiter.sol` - Dispute resolution system with arbiter whitelist
+- `SEORegistry.sol` - Token whitelist management for approved payment tokens
+- `Constants.sol` - Platform configuration (fees, limits, timeouts)
+- Chainlink Automation - Auto-completion after 7-day review period
 
-**In Development:**
+**Placeholder Contracts (Not Implemented):**
 - `SEOValidationOracle.sol` - Oracle integration for API data fetching
 - `ScoreCalculations.sol` - Weighted scoring algorithms
-- `TemplateManager.sol` - Job template management system
 
-**Planned Integrations:**
-- Chainlink Automation (Keepers) - Triggers validation automatically
-- Chainlink Functions - Executes off-chain API calls
-- Google Search Console API - Indexing data
-- SERPApi - Keyword ranking positions
-- PageSpeed Insights API - Performance metrics
+**Active Development (Phase 2):**
+- 🔄 **Google Search Console API** - Indexing and search performance data (IN DEVELOPMENT)
+- ⏳ Chainlink Functions - Executes off-chain API calls for SEO metrics
+- ⏳ SERPApi - Keyword ranking positions  
+- ⏳ PageSpeed Insights API - Core Web Vitals and performance metrics
 
 **Architecture Flow:**
 ```
-Client ⇄ SEOEscrow ⇄ SEOFinance (Payment Handling)
+Client ⇄ SEOEscrow ⇄ SEOFinance (Payment Handling + Fees)
                   ⇄ SEOArbiter (Dispute Resolution)
-                  ⇄ SEOValidationOracle (Coming Soon)
+                  ⇄ SEORegistry (Token Whitelist)
+                  ⇄ Constants (Platform Config)
+                  ⇄ Chainlink Automation (Auto-completion)
+                  ⇄ SEOValidationOracle (Phase 2 - In Development)
+                        ⇄ Google Search Console API (In Development)
 ```
 
 ---
@@ -430,13 +440,14 @@ Client ⇄ SEOEscrow ⇄ SEOFinance (Payment Handling)
 
 ## 💰 Economics
 
-### Planned Fee Structure
+### Current Fee Structure
 
-- **2.5% platform fee** on successful transactions (paid by SEO specialist)
+- **2.5% platform fee** on all deposits (deducted automatically when funds are locked)
 - **0% fee** on refunds (client gets full amount back)
 - **No upfront costs** - Pay only when deals complete
+- **Fee collection** - Fees are sent to designated `feeCollector` address
 
-> Note: Fee collection system (PlatformTreasury) is in development. Current implementation focuses on core escrow functionality.
+> Note: Platform fee system is implemented and active. Advanced treasury management features planned for future releases.
 
 ### Who Benefits?
 
@@ -509,39 +520,53 @@ By bringing transparency and automation to service agreements, we create a faire
 
 ## 📋 Project Status
 
-### ✅ Phase 1: Core Escrow (Current)
+### ✅ Phase 1: Core Escrow (IMPLEMENTED)
 
 **Completed:**
 - ✅ Smart contract architecture design
-- ✅ SEOEscrow: Job lifecycle management (Created → Signed → Funded → Completed/Disputed)
-- ✅ SEOFinance: ETH and ERC20 token custody
-- ✅ SEOArbiter: Dispute resolution system
-- ✅ Farcaster MiniApp frontend foundation
-- ✅ OnchainKit wallet integration
+- ✅ SEOEscrow: Complete job lifecycle management with Chainlink Automation
+- ✅ SEOFinance: ETH and ERC20 token custody with platform fees (2.5%)
+- ✅ SEOArbiter: Dispute resolution system with arbiter whitelist
+- ✅ SEORegistry: Token whitelist management system
+- ✅ Constants: Platform configuration and constants
+- ✅ Chainlink Automation: Auto-completion after 7-day review period
+- ✅ Next.js 15 frontend with App Router
+- ✅ Coinbase OnchainKit wallet integration
+- ✅ Farcaster MiniApp SDK integration
+- ✅ Complete UI component library with dark mode design system
+- ✅ Home page, offers page, and profile page structure
+- ✅ Bottom navigation and responsive layout
+- ✅ Comprehensive test suite for all core contracts
 
 **In Progress:**
-- 🔄 Comprehensive test coverage
-- 🔄 Frontend UI/UX for job creation and management
-- 🔄 Contract deployment scripts
+- 🔄 Frontend-contract integration (connecting UI to deployed contracts)
+- 🔄 Contract deployment scripts and documentation
+- 🔄 Final testing and security review
 
-### 🔮 Phase 2: Validation System (Next)
+### 🔮 Phase 2: Validation System (IN DEVELOPMENT)
 
-**Planned:**
-- ⏳ SEOValidationOracle: Chainlink integration
-- ⏳ ScoreCalculations: Weighted metric scoring
-- ⏳ TemplateManager: Job template system
-- ⏳ API integrations (Google Search Console, SERPApi, PageSpeed)
-- ⏳ Automated validation triggers
+**Currently Planning/Implementing:**
+- 🔄 **Google Search Console API Integration** - Primary focus for automatic SEO metric validation
+- ⏳ SEOValidationOracle: Chainlink Functions for API data fetching
+- ⏳ ScoreCalculations: Weighted metric scoring algorithms
+- ⏳ Automated metric validation and scoring system
 
-### 🚀 Phase 3: Advanced Features (Future)
+**Next in Queue:**
+- ⏳ Additional API integrations (SERPApi, PageSpeed Insights)  
+- ⏳ IPFS integration for storing validation data
+- ⏳ Enhanced frontend for metric selection and monitoring
 
-**Roadmap:**
-- 📅 PlatformTreasury: Fee collection system
+**Current Status:** Google Search Console API integration in active development. Placeholder contracts being replaced with working implementations.
+
+### 🚀 Phase 3: Advanced Features (FUTURE)
+
+**Long-term Roadmap:**
 - 📅 Reputation system for SEO specialists
 - 📅 Multi-chain deployment (Polygon, Arbitrum, Optimism)
-- 📅 Advanced dispute resolution mechanisms
-- 📅 Template marketplace
+- 📅 Job template marketplace
+- 📅 Advanced dispute resolution with DAO governance
 - 📅 White-label solutions for agencies
+- 📅 Integration with other service categories (dev, marketing, design)
 
 ---
 
@@ -579,38 +604,62 @@ forge coverage --report summary
 **Frontend (Farcaster MiniApp):**
 ```bash
 # Navigate to frontend directory
-cd SEOsolver
+cd Provable
 
 # Install dependencies
 npm install
 
-# Run development server
+# Run development server (http://localhost:3000)
 npm run dev
 
 # Build for production
 npm run build
 
+# Start production server
+npm start
+
 # Run linter
 npm run lint
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
 ```
 
 ### Project Structure
 
 ```
 .
-├── src/                    # Solidity smart contracts
-│   ├── SEOEscrow.sol      # Main escrow controller
-│   ├── SEOFinance.sol     # Payment handling
-│   ├── SEOArbiter.sol     # Dispute resolution
-│   ├── SEOValidationOracle.sol  # [WIP] Oracle integration
-│   ├── ScoreCalculations.sol    # [WIP] Scoring logic
-│   └── TemplateManager.sol      # [WIP] Templates
-├── test/                   # Foundry tests
-├── SEOsolver/             # Next.js frontend
-│   └── app/               # Next.js 15 app router
-├── lib/                   # Dependencies (forge-std, OpenZeppelin)
-└── foundry.toml           # Foundry configuration
+├── src/                          # Solidity smart contracts
+│   ├── SEOEscrow.sol            # ✅ Main escrow controller + Chainlink Automation
+│   ├── SEOFinance.sol           # ✅ Payment handling
+│   ├── SEOArbiter.sol           # ✅ Dispute resolution
+│   ├── SEORegistry.sol          # ✅ Token whitelist management
+│   ├── Constants.sol            # ✅ Platform constants
+│   ├── SEOValidationOracle.sol  # 🔄 [IN DEVELOPMENT] Oracle integration
+│   ├── ScoreCalculations.sol    # ⏳ [PLACEHOLDER] Scoring logic
+│   └── interfaces/              # Contract interfaces
+├── test/                         # Foundry tests
+│   ├── BaseTest.sol             # Base test setup
+│   ├── SEOEscrow.t.sol          # Escrow contract tests
+│   ├── SEOFinance.t.sol         # Finance contract tests
+│   ├── SEOArbiter.t.sol         # Arbiter contract tests
+│   └── SEORegistry.t.sol        # Registry contract tests
+├── Provable/                     # ✅ Next.js 15 frontend (App Router)
+│   ├── app/                     # Pages: home, offers, profile
+│   ├── components/              # React components (UI + BottomNavbar)
+│   ├── minikit.config.ts        # Farcaster MiniApp config
+│   └── package.json             # Frontend dependencies
+├── lib/                          # Foundry deps (forge-std, OpenZeppelin, Chainlink)
+├── foundry.toml                  # Foundry configuration
+└── remappings.txt                # Import path remappings
 ```
+
+**Note:** The frontend directory is named `Provable/` but the project was originally called `SEOsolver`. Both names may appear in code.
+
+**Legend:** ✅ = Implemented | ⏳ = Placeholder/Planned | 🔄 = In Development
 
 ### Testing
 
@@ -644,6 +693,137 @@ forge script script/Deploy.s.sol --rpc-url <RPC_URL> --private-key <PRIVATE_KEY>
 
 - [Foundry Book](https://book.getfoundry.sh/) - Smart contract framework docs
 - [OnchainKit](https://docs.base.org/onchainkit) - Frontend blockchain toolkit
+
+---
+
+## ⚠️ Current Limitations
+
+### Phase 1 Limitations
+
+**Smart Contracts:**
+- ⚠️ **Manual validation only** - Oracle-based SEO metric validation not yet implemented
+- ⚠️ **Fixed review period** - 7-day review period is hardcoded (future: configurable)
+- ⚠️ **Single arbiter system** - Dispute resolution requires whitelisted arbiters (future: DAO governance)
+- ⚠️ **Limited token support** - Only whitelisted ERC20 tokens + ETH (future: dynamic token addition)
+
+**Frontend:**
+- ⚠️ **Development stage** - UI exists but contract integration incomplete
+- ⚠️ **Limited wallet support** - Currently Coinbase Wallet focused (future: multi-wallet)
+- ⚠️ **No mobile optimization** - Desktop-first design (responsive but not mobile-native)
+
+**Security:**
+- ⚠️ **Alpha software** - Comprehensive security audit pending
+- ⚠️ **Testnet only** - Not production-ready for mainnet deployment
+- ⚠️ **Limited testing** - Test coverage expanding but not yet comprehensive
+
+### Known Issues
+
+- **Circular dependencies** - SEOEscrow ↔ SEOFinance requires careful deployment order
+- **Gas optimization** - Automation batch size limited to 20 jobs for gas efficiency
+- **Error handling** - Some edge cases in job state transitions need refinement
+
+---
+
+## 🚀 Deployment Guide
+
+### Prerequisites
+
+```bash
+# Install Foundry
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+
+# Install Node.js (v18+)
+# Install Git
+```
+
+### Smart Contract Deployment
+
+⚠️ **IMPORTANT**: Deploy to testnet only. Not production-ready.
+
+**Deployment Order (Critical):**
+```bash
+# 1. Deploy SEORegistry first
+forge create SEORegistry --constructor-args "0xYourAddress"
+
+# 2. Deploy SEOArbiter
+forge create SEOArbiter
+
+# 3. Deploy SEOFinance with zero address placeholder
+forge create SEOFinance --constructor-args "0x0000000000000000000000000000000000000000" "0xYourFeeCollectorAddress"
+
+# 4. Deploy SEOEscrow
+forge create SEOEscrow --constructor-args "$FINANCE_ADDRESS" "$ARBITER_ADDRESS" "$REGISTRY_ADDRESS"
+
+# 5. Set escrow address in finance contract
+cast send $FINANCE_ADDRESS "setEscrow(address)" $ESCROW_ADDRESS --private-key $PRIVATE_KEY
+```
+
+**Environment Variables:**
+```bash
+# Required for deployment
+export PRIVATE_KEY="your_private_key"
+export RPC_URL="https://sepolia.base.org"  # Base Sepolia testnet
+export ETHERSCAN_API_KEY="your_etherscan_key"
+```
+
+### Frontend Deployment
+
+```bash
+cd Provable
+
+# Install dependencies
+npm install
+
+# Set environment variables
+cp .env.example .env.local
+# Edit .env.local with your contract addresses
+
+# Build and deploy
+npm run build
+npm start
+```
+
+### Chainlink Automation Setup
+
+1. **Deploy contracts** following the order above
+2. **Register upkeep** at [automation.chain.link](https://automation.chain.link)
+   - Target: SEOEscrow contract address  
+   - Gas limit: 500,000+
+   - Fund with LINK tokens
+3. **Monitor** upkeep performance and gas usage
+
+---
+
+## 🤝 Contributing
+
+### Development Setup
+
+```bash
+# Clone repository
+git clone https://github.com/DappScout/SEOsolver.git
+cd SEOsolver
+
+# Install smart contract dependencies
+forge install
+
+# Install frontend dependencies
+cd Provable && npm install
+```
+
+### Development Workflow
+
+1. **Smart Contracts**: Use Foundry for development, testing, and deployment
+2. **Frontend**: Use Next.js with TypeScript and Tailwind CSS
+3. **Testing**: Write comprehensive tests for all new features
+4. **Documentation**: Update README and inline comments
+
+### Contribution Guidelines
+
+- **Security First**: All contributions must maintain security standards
+- **Test Coverage**: New features require corresponding tests
+- **Code Quality**: Follow existing patterns and conventions
+- **Documentation**: Update relevant documentation
 
 ---
 
