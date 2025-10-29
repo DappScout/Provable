@@ -287,8 +287,8 @@ flowchart TB
             CheckStatus[During 30 days:<br/>Check website status<br/>and fetch validation data<br/>to calculate score]
             SEOSpec3[SEO spec.]
             SEOSpec4[SEO spec.]
-            APICall[Oracle fetches:<br/>• Google Search Console (In Dev)<br/>• SERPApi rankings<br/>• PageSpeed metrics<br/>• Backlink data]
-            ScoreCalc[Calculate weighted score<br/>based on targets:<br/>• Search performance<br/>• Indexed pages<br/>• Core Web Vitals<br/>• Coverage metrics]
+            APICall[Oracle fetches:<br/>• Google Search Console<br/>• SERPApi rankings<br/>• PageSpeed metrics<br/>• Backlink data]
+            ScoreCalc[Calculate weighted score<br/>based on targets:<br/>• Keyword rankings<br/>• Indexed pages<br/>• Core Web Vitals<br/>• Traffic metrics]
             
             StartValidation --> CheckStatus
             Keeper2 --> CheckStatus
