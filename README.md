@@ -7,8 +7,6 @@
 [![Base](https://img.shields.io/badge/Deployed_on-Base-blue)](https://www.base.org/)
 [![Chainlink](https://img.shields.io/badge/Chainlink-Powered-red)](https://chain.link/)
 
-![Tests](https://github.com/DappScout/Provable/actions/workflows/Tests.yml/badge.svg)
-![Documentation](https://github.com/DappScout/Provable/actions/workflows/Docs.yml/badge.svg)
 
 ---
 ## 🎯 What is Provable?
