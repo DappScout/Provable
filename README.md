@@ -7,6 +7,7 @@
 [![Base](https://img.shields.io/badge/Deployed_on-Base-blue)](https://www.base.org/)
 [![Chainlink](https://img.shields.io/badge/Chainlink-Powered-red)](https://chain.link/)
 
+<img width="1486" height="806" alt="image" src="https://github.com/user-attachments/assets/084ae811-b074-4b7d-a46a-8fb20f29e22f" />
 
 ---
 ## 🎯 What is Provable?
@@ -39,6 +40,9 @@ Provable locks payment in a smart contract and automatically validates SEO perfo
 5. **Work Period** - SEO specialist performs the work (customizable deadline) ✅
 6. **Validation** - Chainlink oracle fetches data from APIs and calculates score 🔮
 7. **Settlement** - Smart contract automatically pays SEO or refunds client based on results 🔮
+
+<img width="1486" height="806" alt="image" src="https://github.com/user-attachments/assets/f1ef5c05-d764-4f13-b500-2d9b2d06007d" />
+
 
 ✅ = Implemented | 🔮 = Planned
 
@@ -329,6 +333,9 @@ flowchart TB
 ```
 
 ---
+
+<img width="1486" height="806" alt="image" src="https://github.com/user-attachments/assets/952e18c3-d9b0-4a7a-a7a3-cf907cc2a0d2" />
+
 
 ## 📊 Validation System (Phase 2 - In Development)
 
